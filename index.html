@@ -2,213 +2,118 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Sawit BUB — Makekal Hulu</title>
 <style>
-  :root{
-    --bg:#F2EDE0;
-    --surface:#FFFFFF;
-    --ink:#221C13;
-    --ink-soft:#6B6152;
-    --green:#24402B;
-    --green-dark:#182C1D;
-    --green-pale:#E4E9DF;
-    --rust:#B84B2C;
-    --rust-dark:#8F3A21;
-    --gold:#A97C24;
-    --line:#DED4BD;
-    --flag:#C97F17;
-    --flag-bg:#FBF0DC;
-    --radius:10px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:84px;
-  }
-  .container{max-width:640px;margin:0 auto;padding:0 16px;}
-  header.topbar{
-    background:var(--green);
-    color:#fff;
-    padding:18px 0 16px;
-    position:sticky;top:0;z-index:20;
-    box-shadow:0 2px 6px rgba(0,0,0,.12);
-  }
-  header.topbar .row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  header.topbar h1{font-size:19px;margin:0;font-weight:700;letter-spacing:.2px;}
-  header.topbar .sub{font-size:12.5px;color:#C9D6C6;margin-top:2px;}
-  .chip{
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.28);
-    border-radius:999px;
-    padding:7px 13px;
-    font-size:12.5px;
-    font-variant-numeric:tabular-nums;
-    white-space:nowrap;
-  }
-  .chip b{font-size:13.5px;}
-
-  section.view{display:none;padding-top:18px;}
-  section.view.active{display:block;}
-
-  h2.viewtitle{font-size:17px;margin:0 0 4px;font-weight:700;}
-  p.viewhint{font-size:13px;color:var(--ink-soft);margin:0 0 16px;line-height:1.5;}
-
-  .card{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:16px;
-    margin-bottom:14px;
-  }
-  .card + .card{margin-top:0;}
-
-  label{
-    display:block;
-    font-size:12.5px;
-    font-weight:600;
-    color:var(--ink-soft);
-    margin:14px 0 6px;
-  }
-  label:first-of-type{margin-top:0;}
-  input[type=text],input[type=number],select,input[type=date]{
-    width:100%;
-    font-size:16px;
-    padding:12px 13px;
-    border:1.5px solid var(--line);
-    border-radius:8px;
-    background:#fff;
-    color:var(--ink);
-    font-family:inherit;
-  }
-  input:focus,select:focus{outline:2px solid var(--green);outline-offset:1px;}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-
-  .total-readout{
-    margin-top:16px;
-    padding:14px;
-    background:var(--green-pale);
-    border-radius:8px;
-    display:flex;justify-content:space-between;align-items:baseline;
-  }
-  .total-readout .lbl{font-size:13px;color:var(--green-dark);font-weight:600;}
-  .total-readout .val{font-size:22px;font-weight:700;color:var(--green-dark);font-variant-numeric:tabular-nums;}
-
-  button.btn{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    font-weight:700;
-    margin-top:16px;
-    min-height:52px;
-    cursor:pointer;
-  }
-  button.btn.primary{background:var(--rust);color:#fff;}
-  button.btn.primary:active{background:var(--rust-dark);}
-  button.btn.primary:disabled{background:#D9CFC0;color:#8b8272;cursor:not-allowed;}
-  button.btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green);}
-  button.btn.small{width:auto;padding:9px 14px;font-size:13.5px;min-height:auto;margin-top:0;}
-
-  .list-item{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:12px 0;border-top:1px solid var(--line);gap:10px;
-  }
-  .list-item:first-child{border-top:none;}
-  .list-item .who{font-size:14.5px;font-weight:600;}
-  .list-item .meta{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
-  .list-item .amt{font-size:14.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .del{background:none;border:none;color:var(--ink-soft);font-size:18px;cursor:pointer;padding:4px 6px;}
-
-  .stok-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .stok-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;}
-  .stok-box .jenis{font-size:13px;font-weight:700;color:var(--green-dark);}
-  .stok-box .kg{font-size:26px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;}
-  .stok-box .rp{font-size:13px;color:var(--ink-soft);margin-top:2px;font-variant-numeric:tabular-nums;}
-  .stok-note{
-    margin-top:14px;padding:12px 14px;border-radius:8px;font-size:13px;line-height:1.5;
-  }
-  .stok-note.ready{background:var(--green-pale);color:var(--green-dark);}
-  .stok-note.notyet{background:#EFEAE0;color:var(--ink-soft);}
-
-  .checklist-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-top:1px solid var(--line);}
-  .checklist-item:first-child{border-top:none;}
-  .checklist-item input{width:auto;margin-top:3px;}
-  .checklist-item .txt{font-size:13.5px;line-height:1.4;}
-  .checklist-item .txt .m{color:var(--ink-soft);font-size:12px;}
-
-  .subhead{font-size:13px;font-weight:700;color:var(--green-dark);margin:18px 0 8px;text-transform:none;}
-  .subhead:first-child{margin-top:0;}
-
-  .calc-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13.5px;}
-  .calc-row.total{border-top:1.5px solid var(--line);margin-top:6px;padding-top:10px;font-weight:700;font-size:15px;}
-  .calc-row .v{font-variant-numeric:tabular-nums;}
-  .calc-row.sub .v{color:var(--ink-soft);}
-  .calc-row.neg .v{color:var(--rust-dark);}
-  .calc-row.pos .v{color:var(--green-dark);}
-
-  .flagnote{background:var(--flag-bg);color:#7A4E0C;border-radius:8px;padding:10px 12px;font-size:12.5px;margin-top:10px;line-height:1.5;}
-
-  .segmented{display:flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;}
-  .segmented button{
-    flex:1;padding:11px;border:none;background:#fff;font-size:13.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
-  }
-  .segmented button.active{background:var(--green);color:#fff;}
-  .segmented button:not(:last-child){border-right:1.5px solid var(--line);}
-
-  .trip-card{cursor:pointer;}
-  .trip-card .head{display:flex;justify-content:space-between;align-items:center;}
-  .trip-card .head .name{font-weight:700;font-size:14.5px;}
-  .trip-card .head .date{font-size:12px;color:var(--ink-soft);}
-  .trip-card .margin{font-size:20px;font-weight:700;margin-top:8px;font-variant-numeric:tabular-nums;}
-  .trip-card .margin.neg{color:var(--rust-dark);}
-  .trip-card .margin.pos{color:var(--green-dark);}
-  .trip-card .detail{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);display:none;}
-  .trip-card.open .detail{display:block;}
-  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;margin-left:8px;}
-  .badge.cod{background:var(--green-pale);color:var(--green-dark);}
-  .badge.pending{background:#F0E2D0;color:var(--gold);}
-
-  .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-  .summary-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;}
-  .summary-box .lbl{font-size:11.5px;color:var(--ink-soft);font-weight:600;}
-  .summary-box .val{font-size:19px;font-weight:700;margin-top:5px;font-variant-numeric:tabular-nums;}
-  .summary-box.wide{grid-column:1/-1;}
-  .summary-box.accent .val{color:var(--rust-dark);}
-  .summary-box.good .val{color:var(--green-dark);}
-
-  .empty{padding:28px 10px;text-align:center;color:var(--ink-soft);font-size:13.5px;line-height:1.6;}
-
-  .protobar{
-    background:#3A3226;color:#EFE7D6;font-size:11.5px;text-align:center;padding:7px 10px;line-height:1.5;
-  }
-
-  nav.tabbar{
-    position:fixed;bottom:0;left:0;right:0;
-    background:#fff;border-top:1px solid var(--line);
-    display:flex;z-index:30;
-    padding-bottom:env(safe-area-inset-bottom);
-  }
-  nav.tabbar button{
-    flex:1;background:none;border:none;padding:10px 4px 9px;
-    display:flex;flex-direction:column;align-items:center;gap:4px;
-    color:var(--ink-soft);cursor:pointer;
-  }
-  nav.tabbar button.active{color:var(--green);}
-  nav.tabbar button .lbl{font-size:11px;font-weight:600;}
-  nav.tabbar svg{width:22px;height:22px;}
-
-  ::placeholder{color:#B7AD9B;}
+:root{--bg:#F2EDE0;--surface:#FFFFFF;--ink:#221C13;--ink-soft:#6B6152;--green:#24402B;--green-dark:#182C1D;--green-pale:#E4E9DF;--rust:#B84B2C;--rust-dark:#8F3A21;--gold:#A97C24;--line:#DED4BD;--flag:#C97F17;--flag-bg:#FBF0DC;--radius:10px}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:84px}
+.container{max-width:640px;margin:0 auto;padding:0 16px}
+header.topbar{background:var(--green);color:#fff;padding:16px 0 14px;position:sticky;top:0;z-index:20;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+header.topbar .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+header.topbar h1{font-size:18px;margin:0;font-weight:700}
+header.topbar .sub{font-size:12px;color:#C9D6C6;margin-top:1px}
+.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 12px;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip b{font-size:13px}
+section.view{display:none;padding-top:16px}
+section.view.active{display:block}
+h2.viewtitle{font-size:17px;margin:0 0 3px;font-weight:700}
+p.viewhint{font-size:12.5px;color:var(--ink-soft);margin:0 0 14px;line-height:1.5}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin:14px 0 5px}
+label:first-of-type{margin-top:0}
+input[type=text],input[type=number],select,input[type=date]{width:100%;font-size:16px;padding:11px 13px;border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-family:inherit;-webkit-appearance:none}
+input:focus,select:focus{outline:2px solid var(--green);outline-offset:1px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.total-readout{margin-top:14px;padding:14px;background:var(--green-pale);border-radius:8px;display:flex;justify-content:space-between;align-items:baseline}
+.total-readout .lbl{font-size:13px;color:var(--green-dark);font-weight:600}
+.total-readout .val{font-size:22px;font-weight:700;color:var(--green-dark);font-variant-numeric:tabular-nums}
+button.btn{width:100%;padding:14px;border:none;border-radius:8px;font-size:16px;font-weight:700;margin-top:14px;min-height:50px;cursor:pointer}
+button.btn.primary{background:var(--rust);color:#fff}
+button.btn.primary:active{background:var(--rust-dark)}
+button.btn.primary:disabled{background:#D9CFC0;color:#8b8272;cursor:not-allowed}
+button.btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+button.btn.small{width:auto;padding:8px 13px;font-size:13px;min-height:auto;margin-top:0}
+.list-item{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid var(--line);gap:8px}
+.list-item:first-child{border-top:none}
+.list-item .who{font-size:14px;font-weight:600}
+.list-item .meta{font-size:12px;color:var(--ink-soft);margin-top:2px}
+.list-item .amt{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.del{background:none;border:none;color:var(--ink-soft);font-size:18px;cursor:pointer;padding:4px 6px;line-height:1}
+.edit-btn{background:none;border:none;color:var(--green);font-size:14px;cursor:pointer;padding:4px 6px;line-height:1;font-weight:600}
+.stok-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stok-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.stok-box .jenis{font-size:12px;font-weight:700;color:var(--green-dark)}
+.stok-box .kg{font-size:26px;font-weight:700;margin-top:5px;font-variant-numeric:tabular-nums}
+.stok-box .rp{font-size:13px;color:var(--ink-soft);margin-top:2px;font-variant-numeric:tabular-nums}
+.stok-note{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:13px;line-height:1.5}
+.stok-note.ready{background:var(--green-pale);color:var(--green-dark)}
+.stok-note.notyet{background:#EFEAE0;color:var(--ink-soft)}
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.checklist-item:first-child{border-top:none}
+.checklist-item input{width:auto;margin-top:3px}
+.checklist-item .txt{font-size:13px;line-height:1.4}
+.checklist-item .txt .m{color:var(--ink-soft);font-size:11.5px}
+.subhead{font-size:13px;font-weight:700;color:var(--green-dark);margin:16px 0 8px}
+.subhead:first-child{margin-top:0}
+.calc-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px}
+.calc-row.total{border-top:1.5px solid var(--line);margin-top:5px;padding-top:9px;font-weight:700;font-size:14.5px}
+.calc-row .v{font-variant-numeric:tabular-nums}
+.calc-row.sub .v{color:var(--ink-soft)}
+.calc-row.neg .v{color:var(--rust-dark)}
+.calc-row.pos .v{color:var(--green-dark)}
+.flagnote{background:var(--flag-bg);color:#7A4E0C;border-radius:8px;padding:9px 11px;font-size:12px;margin-top:10px;line-height:1.5}
+.segmented{display:flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+.segmented button{flex:1;padding:10px;border:none;background:#fff;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer}
+.segmented button.active{background:var(--green);color:#fff}
+.segmented button:not(:last-child){border-right:1.5px solid var(--line)}
+.trip-card{cursor:pointer}
+.trip-card .head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+.trip-card .head .name{font-weight:700;font-size:14px}
+.trip-card .head .date{font-size:11.5px;color:var(--ink-soft)}
+.trip-card .margin{font-size:20px;font-weight:700;margin-top:8px;font-variant-numeric:tabular-nums}
+.trip-card .margin.neg{color:var(--rust-dark)}
+.trip-card .margin.pos{color:var(--green-dark)}
+.trip-card .detail{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);display:none}
+.trip-card.open .detail{display:block}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;margin-left:8px}
+.badge.cod{background:var(--green-pale);color:var(--green-dark)}
+.badge.pending{background:#F0E2D0;color:var(--gold)}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.summary-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.summary-box .lbl{font-size:11.5px;color:var(--ink-soft);font-weight:600}
+.summary-box .val{font-size:18px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.summary-box.wide{grid-column:1/-1}
+.summary-box.accent .val{color:var(--rust-dark)}
+.summary-box.good .val{color:var(--green-dark)}
+.empty{padding:26px 10px;text-align:center;color:var(--ink-soft);font-size:13px;line-height:1.6}
+nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabbar button{flex:1;background:none;border:none;padding:9px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink-soft);cursor:pointer}
+nav.tabbar button.active{color:var(--green)}
+nav.tabbar button .lbl{font-size:10.5px;font-weight:600}
+nav.tabbar svg{width:22px;height:22px}
+::placeholder{color:#B7AD9B}
+.price-suggest{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.price-suggest button{background:var(--green-pale);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:12.5px;font-weight:600;color:var(--green-dark);cursor:pointer}
+.price-suggest button:hover{background:#d4ddd0}
+.price-suggest button.active{background:var(--green);color:#fff;border-color:var(--green)}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;margin-left:5px}
+.tag.beli{background:#E4E9DF;color:var(--green-dark)}
+.tag.jual{background:#F0E2D0;color:var(--gold)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--surface);border-radius:var(--radius);max-width:500px;width:100%;max-height:90vh;overflow-y:auto;padding:20px}
+.modal h3{font-size:17px;margin:0 0 12px;font-weight:700}
+.modal-actions{display:flex;gap:10px;margin-top:16px}
+.modal-actions button{flex:1;padding:12px;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
+.modal-actions .save{background:var(--green);color:#fff}
+.modal-actions .cancel{background:#f0f0f0;color:var(--ink-soft)}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.price-config-btn{background:none;border:none;color:var(--ink-soft);font-size:12px;text-decoration:underline;cursor:pointer;padding:0;margin-top:4px}
+.price-config-btn:hover{color:var(--green)}
 </style>
 </head>
 <body>
-
-<div class="protobar">Prototipe demo — data tersimpan sementara selama sesi ini saja, belum permanen/offline</div>
 
 <header class="topbar">
   <div class="container row">
@@ -225,18 +130,16 @@
   <!-- BELI -->
   <section class="view active" id="view-beli">
     <h2 class="viewtitle">Beli dari Petani</h2>
-    <p class="viewhint">Catat setiap kali timbang. Harga terisi otomatis dari transaksi terakhir, bisa diubah.</p>
+    <p class="viewhint">Catat setiap kali timbang. Harga terisi dari rekomendasi, bisa diubah.</p>
     <div class="card">
       <label>Jenis</label>
       <div class="segmented" id="beliJenis">
         <button type="button" data-val="Berondol" class="active">Berondol</button>
         <button type="button" data-val="TBS">TBS</button>
       </div>
-
       <label for="beliNama">Nama Petani</label>
-      <input type="text" id="beliNama" list="petaniList" placeholder="Ketik atau pilih nama">
+      <input type="text" id="beliNama" list="petaniList" placeholder="Ketik atau pilih nama" autocomplete="off">
       <datalist id="petaniList"></datalist>
-
       <div class="row2">
         <div>
           <label for="beliBerat">Berat (kg)</label>
@@ -245,17 +148,15 @@
         <div>
           <label for="beliHarga">Harga / kg</label>
           <input type="number" id="beliHarga" inputmode="decimal" placeholder="0">
+          <div class="price-suggest" id="beliPriceSuggest"></div>
         </div>
       </div>
-
       <div class="total-readout">
         <span class="lbl">Total dibayar</span>
         <span class="val" id="beliTotal">Rp 0</span>
       </div>
-
       <button class="btn primary" id="beliSubmit" disabled>Simpan &amp; Tandai Lunas</button>
     </div>
-
     <div class="subhead">Transaksi hari ini</div>
     <div class="card" id="beliList">
       <div class="empty">Belum ada transaksi beli hari ini.</div>
@@ -265,96 +166,90 @@
   <!-- STOK -->
   <section class="view" id="view-stok">
     <h2 class="viewtitle">Stok Menunggu Jual</h2>
-    <p class="viewhint">Dihitung otomatis dari semua transaksi beli yang belum masuk trip jual manapun.</p>
-
+    <p class="viewhint">Dihitung otomatis dari semua transaksi beli yang belum masuk trip.</p>
     <div class="stok-grid">
-      <div class="stok-box">
-        <div class="jenis">BERONDOL</div>
-        <div class="kg" id="stokBerondolKg">0 kg</div>
-        <div class="rp" id="stokBerondolRp">Rp 0</div>
-      </div>
-      <div class="stok-box">
-        <div class="jenis">TBS</div>
-        <div class="kg" id="stokTbsKg">0 kg</div>
-        <div class="rp" id="stokTbsRp">Rp 0</div>
-      </div>
+      <div class="stok-box"><div class="jenis">BERONDOL</div><div class="kg" id="stokBerondolKg">0 kg</div><div class="rp" id="stokBerondolRp">Rp 0</div></div>
+      <div class="stok-box"><div class="jenis">TBS</div><div class="kg" id="stokTbsKg">0 kg</div><div class="rp" id="stokTbsRp">Rp 0</div></div>
     </div>
-
     <div class="stok-note" id="stokNote">Belum ada stok.</div>
-
     <div class="subhead">Rincian per petani (belum terjual)</div>
-    <div class="card" id="stokList">
-      <div class="empty">Belum ada stok menunggu.</div>
-    </div>
+    <div class="card" id="stokList"><div class="empty">Belum ada stok menunggu.</div></div>
   </section>
 
   <!-- JUAL -->
   <section class="view" id="view-jual">
     <h2 class="viewtitle">Jual ke Loading</h2>
-    <p class="viewhint">Buat satu trip setiap kali berangkat ke loading. Isi berdasarkan nota dari loading.</p>
-
+    <p class="viewhint">Buat trip setiap kali kirim ke loading. Isi dari nota yang balik.</p>
     <button class="btn primary" id="btnTripBaru">+ Trip Jual Baru</button>
-
-    <div class="subhead" style="margin-top:22px;">Riwayat trip</div>
-    <div id="tripList">
-      <div class="card"><div class="empty">Belum ada trip jual.</div></div>
-    </div>
+    <div class="subhead" style="margin-top:20px;">Riwayat trip</div>
+    <div id="tripList"><div class="card"><div class="empty">Belum ada trip jual.</div></div></div>
   </section>
 
   <!-- KAS -->
   <section class="view" id="view-kas">
     <h2 class="viewtitle">Pengeluaran Operasional &amp; Sosial</h2>
-    <p class="viewhint">Terpisah dari margin dagang — supaya kesehatan margin jual-beli tetap kelihatan jelas.</p>
+    <p class="viewhint">Terpisah dari margin dagang — supaya kesehatan margin tetap kelihatan jelas.</p>
     <div class="card">
       <label>Kategori</label>
       <select id="kasKategori">
-        <option>Makan Pekerja</option>
-        <option>Tips Bongkar Muat</option>
-        <option>Inventaris</option>
-        <option>Dana Sosial Koperasi</option>
-        <option>Lain-lain</option>
+        <option>Makan Pekerja</option><option>Tips Bongkar Muat</option><option>Inventaris</option><option>Dana Sosial Koperasi</option><option>Lain-lain</option>
       </select>
-
       <label for="kasJumlah">Jumlah (Rp)</label>
       <input type="number" id="kasJumlah" inputmode="decimal" placeholder="0">
-
-      <div id="kasPekerjaWrap" style="display:none;">
+      <div id="kasPekerjaWrap" style="display:none">
         <label for="kasPekerja">Jumlah pekerja hadir</label>
         <input type="number" id="kasPekerja" inputmode="numeric" placeholder="0">
       </div>
-
       <label for="kasKet">Keterangan</label>
       <input type="text" id="kasKet" placeholder="Untuk apa / siapa penerima">
-
       <button class="btn primary" id="kasSubmit" disabled>Simpan Pengeluaran</button>
     </div>
-
     <div class="subhead">Riwayat pengeluaran</div>
-    <div class="card" id="kasList">
-      <div class="empty">Belum ada pengeluaran tercatat.</div>
+    <div class="card" id="kasList"><div class="empty">Belum ada pengeluaran tercatat.</div></div>
+  </section>
+
+  <!-- PENGATURAN -->
+  <section class="view" id="view-pengaturan">
+    <h2 class="viewtitle">Pengaturan</h2>
+    <p class="viewhint">Atur harga rekomendasi, import data lama, dan kelola data.</p>
+    <div class="card">
+      <div class="subhead" style="margin-top:0">💰 Harga Rekomendasi</div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin:0 0 10px">Tombol rekomendasi yang muncul di form beli &amp; jual. Bisa diubah kapan saja.</p>
+      <div id="priceConfigForm"></div>
+      <button class="btn primary" id="priceConfigSave">Simpan Pengaturan Harga</button>
+    </div>
+    <div class="card">
+      <div class="subhead" style="margin-top:0">📥 Import Data Lama</div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin:0 0 10px">Import data dari backup JSON atau file sebelumnya.</p>
+      <input type="file" id="importFile" accept=".json" style="font-size:14px;padding:10px;border:1.5px solid var(--line);border-radius:8px;width:100%">
+      <button class="btn ghost" id="importBtn">Import Data</button>
+    </div>
+    <div class="card">
+      <div class="subhead" style="margin-top:0">📤 Backup Data</div>
+      <button class="btn ghost" id="exportBtn">Download Backup JSON</button>
+    </div>
+    <div class="card">
+      <div class="subhead" style="margin-top:0">🗑️ Reset Data</div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin:0 0 10px">Hapus semua data lokal. Tidak bisa undo!</p>
+      <button class="btn primary" id="resetBtn" style="background:var(--rust-dark)">Reset Semua Data</button>
     </div>
   </section>
 
   <!-- RINGKASAN -->
   <section class="view" id="view-ringkasan">
     <h2 class="viewtitle">Ringkasan</h2>
-    <p class="viewhint">Margin dagang dan pengeluaran sosial ditampilkan terpisah dengan sengaja.</p>
-
+    <p class="viewhint">Margin dagang dan pengeluaran operasional ditampilkan terpisah.</p>
     <div class="summary-grid">
       <div class="summary-box"><div class="lbl">Total Modal Dibeli</div><div class="val" id="sumModal">Rp 0</div></div>
       <div class="summary-box"><div class="lbl">Total Pendapatan Jual</div><div class="val" id="sumJual">Rp 0</div></div>
       <div class="summary-box good"><div class="lbl">Margin Dagang Bersih</div><div class="val" id="sumMargin">Rp 0</div></div>
       <div class="summary-box accent"><div class="lbl">Pengeluaran Ops &amp; Sosial</div><div class="val" id="sumKas">Rp 0</div></div>
-      <div class="summary-box wide"><div class="lbl">Posisi Kas Bersih (Margin − Ops/Sosial)</div><div class="val" id="sumBersih">Rp 0</div></div>
+      <div class="summary-box wide"><div class="lbl">Posisi Kas Bersih (Margin − Ops)</div><div class="val" id="sumBersih">Rp 0</div></div>
       <div class="summary-box wide"><div class="lbl">Piutang Loading (belum dibayar)</div><div class="val" id="sumPiutang">Rp 0</div></div>
     </div>
-
     <div class="subhead">Pemantauan selisih timbangan &amp; margin per kg</div>
-    <div class="card" id="anomaliList">
-      <div class="empty">Butuh minimal 2 trip selesai untuk mulai hitung rata-rata.</div>
-    </div>
+    <div class="card" id="anomaliList"><div class="empty">Butuh minimal 2 trip selesai untuk mulai hitung rata-rata.</div></div>
   </section>
-
 </div>
 
 <nav class="tabbar">
@@ -374,29 +269,96 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
     <span class="lbl">Kas</span>
   </button>
+  <button class="tab" data-view="pengaturan">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    <span class="lbl">Atur</span>
+  </button>
   <button class="tab" data-view="ringkasan">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
     <span class="lbl">Ringkasan</span>
   </button>
 </nav>
 
+<div id="editModal" class="modal-overlay" style="display:none">
+  <div class="modal" id="editModalContent"></div>
+</div>
+
+<div id="priceConfigModal" class="modal-overlay" style="display:none">
+  <div class="modal" id="priceConfigModalContent"></div>
+</div>
+
 <script>
 (function(){
   "use strict";
 
-  // ---------- STATE ----------
-  var state = {
-    purchases: [],   // {id, ts, jenis, nama, berat, harga, total, tripId}
-    trips: [],       // see buildTrip()
-    expenses: [],    // {id, ts, kategori, jumlah, ket, pekerja}
-    lastHarga: {Berondol:null, TBS:null},
-    idSeq: 1
-  };
+  // ===================== STATE =====================
+  const STORAGE_KEY = 'sawit_bub_state';
+  const CONFIG_KEY = 'sawit_bub_config';
 
-  function nextId(){ return state.idSeq++; }
+  let state = loadState();
+  let config = loadConfig();
+
+  function defaultState(){
+    return {
+      purchases: [],   // {id, ts, date, jenis, nama, berat, harga, total, tripId}
+      trips: [],       // {id, ts, date, namaLoading, figures:{...}, status, jatuhTempo}
+      expenses: [],    // {id, ts, date, kategori, jumlah, ket, pekerja}
+      nextId: 1
+    };
+  }
+
+  function defaultConfig(){
+    return {
+      priceSuggestions: {
+        beli: { Berondol: [2700, 2800, 2900, 3000], TBS: [2400, 2500, 2600, 2700] },
+        jual: { GradeA: [3300, 3400, 3500, 3600], GradeB: [2900, 3000, 3100, 3200] }
+      },
+      loadingRates: { bongkar: { Berondol: 60000, TBS: 40000 }, transport: [70000, 100000] }
+    };
+  }
+
+  function loadState(){
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(raw) {
+        var parsed = JSON.parse(raw);
+        // ensure nextId
+        if(!parsed.nextId) {
+          var maxId = 0;
+          parsed.purchases.forEach(function(p){ if(p.id > maxId) maxId = p.id; });
+          parsed.trips.forEach(function(t){ if(t.id > maxId) maxId = t.id; });
+          parsed.expenses.forEach(function(e){ if(e.id > maxId) maxId = e.id; });
+          parsed.nextId = maxId + 1;
+        }
+        return parsed;
+      }
+    } catch(e){ console.warn('State load failed', e); }
+    return defaultState();
+  }
+
+  function loadConfig(){
+    try {
+      var raw = localStorage.getItem(CONFIG_KEY);
+      if(raw) return JSON.parse(raw);
+    } catch(e){}
+    return defaultConfig();
+  }
+
+  function saveState(){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){ console.warn('Save failed', e); }
+  }
+
+  function saveConfig(){
+    try { localStorage.setItem(CONFIG_KEY, JSON.stringify(config)); } catch(e){} 
+  }
+
+  function nextId(){ return state.nextId++; }
   function nowStr(){
     var d = new Date();
     return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short'}) + ' ' + d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  }
+  function todayStr(){
+    return new Date().toISOString().slice(0,10);
   }
   function rp(n){
     n = Math.round(n||0);
@@ -406,8 +368,11 @@
     n = Math.round((n||0)*10)/10;
     return n.toLocaleString('id-ID') + ' kg';
   }
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
+  }
 
-  // ---------- TAB NAV ----------
+  // ===================== TAB NAV =====================
   var tabs = document.querySelectorAll('nav.tabbar .tab');
   tabs.forEach(function(t){
     t.addEventListener('click', function(){
@@ -418,24 +383,61 @@
     });
   });
 
-  // ================= BELI =================
+  // ===================== PRICE SUGGESTIONS =====================
+  function renderPriceSuggestions(containerId, type, currentVal){
+    var cont = document.getElementById(containerId);
+    if(!cont) return;
+    var suggestions;
+    if(type==='beli-berondol') suggestions = config.priceSuggestions.beli.Berondol;
+    else if(type==='beli-tbs') suggestions = config.priceSuggestions.beli.TBS;
+    else if(type==='jual-a') suggestions = config.priceSuggestions.jual.GradeA;
+    else if(type==='jual-b') suggestions = config.priceSuggestions.jual.GradeB;
+    else return;
+    cont.innerHTML = suggestions.map(function(v){
+      var active = (parseFloat(currentVal)||0) === v ? 'active' : '';
+      return '<button type="button" class="'+active+'" data-val="'+v+'">Rp'+v.toLocaleString('id-ID')+'</button>';
+    }).join('');
+    cont.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        cont.querySelectorAll('button').forEach(function(b){b.classList.remove('active');});
+        btn.classList.add('active');
+        // find parent input
+        var input = cont.parentElement.querySelector('input');
+        if(input) { input.value = btn.dataset.val; input.dispatchEvent(new Event('input')); }
+      });
+    });
+  }
+
+  // ===================== BELI =====================
   var beliJenis = 'Berondol';
   document.querySelectorAll('#beliJenis button').forEach(function(b){
     b.addEventListener('click', function(){
       document.querySelectorAll('#beliJenis button').forEach(function(x){x.classList.remove('active');});
       b.classList.add('active');
       beliJenis = b.dataset.val;
-      var lh = state.lastHarga[beliJenis];
-      if(lh) document.getElementById('beliHarga').value = lh;
+      var lastHarga = getLastPrice('beli', beliJenis);
+      if(lastHarga) document.getElementById('beliHarga').value = lastHarga;
+      renderPriceSuggestions('beliPriceSuggest', 'beli-'+beliJenis.toLowerCase(), lastHarga);
       updateBeliTotal();
     });
   });
+
+  function getLastPrice(type, jenis){
+    if(type==='beli'){
+      var found = state.purchases.filter(function(p){return p.jenis===jenis;});
+      return found.length > 0 ? found[0].harga : null;
+    }
+    return null;
+  }
+
+  updateBeliTotal();
 
   var beliBerat = document.getElementById('beliBerat');
   var beliHarga = document.getElementById('beliHarga');
   var beliNama = document.getElementById('beliNama');
   var beliTotalEl = document.getElementById('beliTotal');
   var beliSubmit = document.getElementById('beliSubmit');
+  var editingPurchaseId = null;
 
   function updateBeliTotal(){
     var b = parseFloat(beliBerat.value)||0;
@@ -445,44 +447,104 @@
     beliSubmit.disabled = !(b>0 && h>0 && beliNama.value.trim().length>0);
   }
   beliBerat.addEventListener('input', updateBeliTotal);
-  beliHarga.addEventListener('input', updateBeliTotal);
+  beliHarga.addEventListener('input', function(){
+    renderPriceSuggestions('beliPriceSuggest', 'beli-'+beliJenis.toLowerCase(), this.value);
+    updateBeliTotal();
+  });
   beliNama.addEventListener('input', updateBeliTotal);
+  // auto select from datalist
+  beliNama.addEventListener('change', updateBeliTotal);
 
-  beliSubmit.addEventListener('click', function(){
+  function submitPurchase(editId){
     var b = parseFloat(beliBerat.value)||0;
     var h = parseFloat(beliHarga.value)||0;
     var nama = beliNama.value.trim();
     if(!(b>0 && h>0 && nama)) return;
-    state.purchases.unshift({
-      id: nextId(), ts: nowStr(), jenis: beliJenis, nama: nama,
-      berat: b, harga: h, total: b*h, tripId: null
-    });
-    state.lastHarga[beliJenis] = h;
-    beliBerat.value=''; beliNama.value='';
+
+    var purchase = {
+      id: editId || nextId(),
+      ts: nowStr(),
+      date: todayStr(),
+      jenis: beliJenis,
+      nama: nama,
+      berat: b,
+      harga: h,
+      total: b*h,
+      tripId: null
+    };
+
+    if(editId){
+      var idx = state.purchases.findIndex(function(p){return p.id===editId;});
+      if(idx>=0){
+        // preserve tripId
+        purchase.tripId = state.purchases[idx].tripId;
+        state.purchases[idx] = purchase;
+      }
+    } else {
+      state.purchases.unshift(purchase);
+    }
+
+    saveState();
+    beliBerat.value=''; beliHarga.value=''; beliNama.value='';
+    editingPurchaseId = null;
+    beliSubmit.textContent = 'Simpan & Tandai Lunas';
     updateBeliTotal();
     renderAll();
+  }
+
+  beliSubmit.addEventListener('click', function(){
+    submitPurchase(editingPurchaseId);
   });
+
+  function openEditPurchase(id){
+    var p = state.purchases.find(function(x){return x.id===id;});
+    if(!p) return;
+    editingPurchaseId = id;
+    beliNama.value = p.nama;
+    beliBerat.value = p.berat;
+    beliHarga.value = p.harga;
+    // set jenis
+    beliJenis = p.jenis;
+    document.querySelectorAll('#beliJenis button').forEach(function(b){
+      b.classList.remove('active');
+      if(b.dataset.val===p.jenis) b.classList.add('active');
+    });
+    renderPriceSuggestions('beliPriceSuggest', 'beli-'+beliJenis.toLowerCase(), p.harga);
+    updateBeliTotal();
+    beliSubmit.textContent = '✏️ Simpan Perubahan';
+    // switch to beli tab
+    document.querySelectorAll('nav.tabbar .tab').forEach(function(t){t.classList.remove('active');});
+    document.querySelector('[data-view="beli"]').classList.add('active');
+    document.querySelectorAll('section.view').forEach(function(v){v.classList.remove('active');});
+    document.getElementById('view-beli').classList.add('active');
+  }
 
   function renderBeliList(){
     var wrap = document.getElementById('beliList');
-    var today = state.purchases;
-    if(today.length===0){ wrap.innerHTML = '<div class="empty">Belum ada transaksi beli hari ini.</div>'; return; }
-    wrap.innerHTML = today.map(function(p){
+    if(state.purchases.length===0){
+      wrap.innerHTML = '<div class="empty">Belum ada transaksi beli.</div>';
+      return;
+    }
+    wrap.innerHTML = state.purchases.map(function(p){
       return '<div class="list-item">'+
-        '<div><div class="who">'+esc(p.nama)+' <span style="font-weight:400;color:var(--ink-soft);">· '+p.jenis+'</span></div>'+
-        '<div class="meta">'+p.ts+' · '+kg(p.berat)+' @ '+rp(p.harga)+(p.tripId?' · sudah terjual':'')+'</div></div>'+
-        '<div style="display:flex;align-items:center;gap:6px;"><div class="amt">'+rp(p.total)+'</div>'+
-        (p.tripId? '' : '<button class="del" data-del-purchase="'+p.id+'" title="Hapus">✕</button>')+
+        '<div><div class="who">'+esc(p.nama)+' <span style="font-weight:400;color:var(--ink-soft);font-size:12px">· '+p.jenis+'</span></div>'+
+        '<div class="meta">'+p.ts+' · '+kg(p.berat)+' @ '+rp(p.harga)+(p.tripId?' <span class="tag jual">terjual</span>':'')+'</div></div>'+
+        '<div style="display:flex;align-items:center;gap:4px">'+
+        '<div class="amt">'+rp(p.total)+'</div>'+
+        '<button class="edit-btn" data-edit-purchase="'+p.id+'" title="Edit">✏️</button>'+
+        '<button class="del" data-del-purchase="'+p.id+'" title="Hapus">✕</button>'+
         '</div></div>';
     }).join('');
   }
 
   document.getElementById('beliList').addEventListener('click', function(e){
-    var id = e.target.getAttribute('data-del-purchase');
-    if(id){
-      state.purchases = state.purchases.filter(function(p){return p.id!=id;});
-      renderAll();
+    var id = parseInt(e.target.getAttribute('data-del-purchase'));
+    if(id && confirm('Hapus transaksi ini?')){
+      state.purchases = state.purchases.filter(function(p){return p.id!==id;});
+      saveState(); renderAll();
     }
+    var editId = parseInt(e.target.getAttribute('data-edit-purchase'));
+    if(editId) openEditPurchase(editId);
   });
 
   function renderPetaniList(){
@@ -490,7 +552,7 @@
     document.getElementById('petaniList').innerHTML = names.map(function(n){return '<option value="'+esc(n)+'">';}).join('');
   }
 
-  // ================= STOK =================
+  // ===================== STOK =====================
   function pendingByJenis(jenis){
     return state.purchases.filter(function(p){return p.jenis===jenis && !p.tripId;});
   }
@@ -502,77 +564,84 @@
     var t = pendingByJenis('TBS');
     var bKg = sumBerat(b), bRp = sumTotal(b);
     var tKg = sumBerat(t), tRp = sumTotal(t);
-
     document.getElementById('stokBerondolKg').textContent = kg(bKg);
     document.getElementById('stokBerondolRp').textContent = rp(bRp);
     document.getElementById('stokTbsKg').textContent = kg(tKg);
     document.getElementById('stokTbsRp').textContent = rp(tRp);
     document.getElementById('chipStok').textContent = Math.round(bKg+tKg).toLocaleString('id-ID')+' kg';
-
     var totalKg = bKg+tKg;
     var noteEl = document.getElementById('stokNote');
-    if(totalKg===0){
-      noteEl.className='stok-note notyet';
-      noteEl.textContent='Belum ada stok menunggu.';
-    } else if(totalKg>=2000){
-      noteEl.className='stok-note ready';
-      noteEl.textContent='Stok sudah '+kg(totalKg)+' — sudah lewat minimum 2 ton, siap dibawa jual kapan saja.';
-    } else {
-      noteEl.className='stok-note notyet';
-      noteEl.textContent='Stok baru '+kg(totalKg)+' — masih di bawah minimum 2 ton untuk satu trip jual.';
-    }
-
+    if(totalKg===0){ noteEl.className='stok-note notyet'; noteEl.textContent='Belum ada stok menunggu.'; }
+    else if(totalKg>=2000){ noteEl.className='stok-note ready'; noteEl.textContent='Stok sudah '+kg(totalKg)+' — siap jual!'; }
+    else { noteEl.className='stok-note notyet'; noteEl.textContent='Stok baru '+kg(totalKg)+' — butuh '+(2000-totalKg).toLocaleString('id-ID')+' kg lagi.'; }
     var all = b.concat(t);
     var wrap = document.getElementById('stokList');
     if(all.length===0){ wrap.innerHTML = '<div class="empty">Belum ada stok menunggu.</div>'; return; }
     wrap.innerHTML = all.map(function(p){
-      return '<div class="list-item"><div><div class="who">'+esc(p.nama)+' <span style="font-weight:400;color:var(--ink-soft);">· '+p.jenis+'</span></div>'+
+      return '<div class="list-item"><div><div class="who">'+esc(p.nama)+' <span style="font-weight:400;color:var(--ink-soft);font-size:12px">· '+p.jenis+'</span></div>'+
         '<div class="meta">'+p.ts+' · '+kg(p.berat)+'</div></div><div class="amt">'+rp(p.total)+'</div></div>';
     }).join('');
   }
 
-  // ================= JUAL =================
+  // ===================== JUAL =====================
   document.getElementById('btnTripBaru').addEventListener('click', openTripForm);
+  var editingTripId = null;
 
-  function openTripForm(){
+  function openTripForm(editTripData){
     var b = pendingByJenis('Berondol');
     var t = pendingByJenis('TBS');
-    if(b.length+t.length===0){
-      alert('Belum ada stok menunggu untuk dijual.');
-      return;
-    }
     var wrap = document.getElementById('tripList');
+    var isEdit = !!editTripData;
+
     var formHtml = '<div class="card" id="tripFormCard">'+
-      '<div class="subhead" style="margin-top:0;">Trip Baru</div>'+
+      '<div class="subhead" style="margin-top:0">'+(isEdit?'✏️ Edit Trip':'Trip Baru')+'</div>'+
       '<label for="tripLoading">Nama Loading</label>'+
-      '<input type="text" id="tripLoading" placeholder="Nama loading tujuan">'+
+      '<input type="text" id="tripLoading" placeholder="Nama loading tujuan" value="'+(isEdit?esc(editTripData.namaLoading):'')+'">';
 
-      '<div class="subhead">Sertakan dari stok pending</div>'+
-      renderChecklist(b,'Berondol') + renderChecklist(t,'TBS') +
+    if(!isEdit){
+      formHtml += '<div class="subhead">Sertakan dari stok pending</div>'+
+        renderChecklist(b,'Berondol') + renderChecklist(t,'TBS');
+    }
 
-      buildJenisBlock('Berondol', b) +
-      buildJenisBlock('TBS', t) +
+    // If editing, pre-fill with trip data
+    var editBrondol = isEdit && editTripData.figures.perJenis ? (editTripData.figures.perJenis['Berondol'] || null) : null;
+    var editTbs = isEdit && editTripData.figures.perJenis ? (editTripData.figures.perJenis['TBS'] || null) : null;
 
-      '<div class="subhead">Biaya Trip</div>'+
+    if(!isEdit || b.length>0 || editBrondol){
+      formHtml += buildJenisBlockEdit('Berondol', isEdit ? editBrondol : null, config);
+    }
+    if(!isEdit || t.length>0 || editTbs){
+      formHtml += buildJenisBlockEdit('TBS', isEdit ? editTbs : null, config);
+    }
+
+    var defTransport = isEdit ? (editTripData.figures.tarifTransport||70000) : 70000;
+    var defBongkarBr = isEdit && editBrondol ? editBrondol.bongkarTarif : config.loadingRates.bongkar.Berondol;
+    var defBongkarTbs = isEdit && editTbs ? editTbs.bongkarTarif : config.loadingRates.bongkar.TBS;
+    var defTips = isEdit ? (editTripData.figures.tips||0) : 0;
+    var defStatus = isEdit ? editTripData.status : 'COD';
+    var defJatuhTempo = isEdit ? (editTripData.jatuhTempo||'') : '';
+
+    formHtml += '<div class="subhead">Biaya Trip</div>'+
       '<label>Tarif transport (per ton)</label>'+
-      '<select id="tripTarifTransport"><option value="70000">Rp70.000/ton</option><option value="100000">Rp100.000/ton</option><option value="custom">Lainnya…</option></select>'+
-      '<div id="tripTarifTransportCustomWrap" style="display:none;"><input type="number" id="tripTarifTransportCustom" placeholder="Rp per ton" style="margin-top:8px;"></div>'+
-
+      '<select id="tripTarifTransport"><option value="70000" '+(defTransport===70000?'selected':'')+'>Rp70.000/ton</option><option value="100000" '+(defTransport===100000?'selected':'')+'>Rp100.000/ton</option><option value="custom" '+([70000,100000].indexOf(defTransport)<0?'selected':'')+'>Lainnya…</option></select>'+
+      '<div id="tripTarifTransportCustomWrap" style="display:'+([70000,100000].indexOf(defTransport)<0?'block':'none')+'"><input type="number" id="tripTarifTransportCustom" value="'+([70000,100000].indexOf(defTransport)<0?defTransport:'')+'" placeholder="Rp per ton" style="margin-top:8px"></div>'+
       '<label for="tripTips">Tips tukang bongkar muat (opsional)</label>'+
-      '<input type="number" id="tripTips" placeholder="0">'+
-
+      '<input type="number" id="tripTips" value="'+defTips+'" placeholder="0">'+
       '<label>Status pembayaran loading</label>'+
-      '<div class="segmented" id="tripStatusBayar"><button type="button" data-val="COD" class="active">COD (lunas)</button><button type="button" data-val="Pending">Pending</button></div>'+
-      '<div id="tripJatuhTempoWrap" style="display:none;"><label for="tripJatuhTempo">Jatuh tempo</label><input type="date" id="tripJatuhTempo"></div>'+
-
+      '<div class="segmented" id="tripStatusBayar"><button type="button" data-val="COD" class="'+(defStatus==='COD'?'active':'')+'">COD (lunas)</button><button type="button" data-val="Pending" class="'+(defStatus==='Pending'?'active':'')+'">Pending</button></div>'+
+      '<div id="tripJatuhTempoWrap" style="display:'+(defStatus==='Pending'?'block':'none')+'"><label for="tripJatuhTempo">Jatuh tempo</label><input type="date" id="tripJatuhTempo" value="'+defJatuhTempo+'"></div>'+
       '<div id="tripCalc"></div>'+
-      '<button class="btn primary" id="tripSubmit">Simpan Trip</button>'+
-      '<button class="btn ghost" id="tripCancel" style="margin-top:10px;">Batal</button>'+
+      '<button class="btn primary" id="tripSubmit">'+(isEdit?'✏️ Simpan Perubahan':'Simpan Trip')+'</button>'+
+      '<button class="btn ghost" id="tripCancel" style="margin-top:10px">Batal</button>'+
       '</div>';
-    wrap.insertAdjacentHTML('afterbegin', formHtml);
 
-    bindTripFormEvents(b,t);
-    recalcTrip(b,t);
+    // Remove existing form if any
+    var existing = document.getElementById('tripFormCard');
+    if(existing) existing.remove();
+
+    wrap.insertAdjacentHTML('afterbegin', formHtml);
+    bindTripFormEvents(b,t, isEdit, editTripData);
+    recalcTrip(b,t, isEdit, editTripData);
   }
 
   function renderChecklist(list, jenis){
@@ -583,36 +652,37 @@
     }).join('');
   }
 
-  function buildJenisBlock(jenis, list){
-    if(list.length===0) return '';
-    var defBongkar = jenis==='Berondol' ? 60000 : 40000;
+  function buildJenisBlockEdit(jenis, editData, config){
+    var defBongkar = editData ? editData.bongkarTarif : (jenis==='Berondol' ? config.loadingRates.bongkar.Berondol : config.loadingRates.bongkar.TBS);
     var id = jenis.toLowerCase();
+    var gAb = editData ? editData.gAb : 0;
+    var gAh = editData ? editData.gAh : 0;
+    var gBb = editData ? editData.gBb : 0;
+    var gBh = editData ? editData.gBh : 0;
+    var loadBerat = editData ? editData.beratLoading : 0;
     return '<div class="subhead">Hasil Timbang Loading — '+jenis+'</div>'+
-      '<label for="loadBerat_'+id+'">Berat timbang loading (kg)</label>'+
-      '<input type="number" id="loadBerat_'+id+'" placeholder="0" data-recalc="1">'+
-      '<div class="row2">'+
-        '<div><label for="gA_berat_'+id+'">Grade A — kg</label><input type="number" id="gA_berat_'+id+'" placeholder="0" data-recalc="1"></div>'+
-        '<div><label for="gA_harga_'+id+'">Grade A — harga/kg</label><input type="number" id="gA_harga_'+id+'" placeholder="0" data-recalc="1"></div>'+
-      '</div>'+
-      '<div class="row2">'+
-        '<div><label for="gB_berat_'+id+'">Grade B — kg (jika ada)</label><input type="number" id="gB_berat_'+id+'" placeholder="0" data-recalc="1"></div>'+
-        '<div><label for="gB_harga_'+id+'">Grade B — harga/kg</label><input type="number" id="gB_harga_'+id+'" placeholder="0" data-recalc="1"></div>'+
-      '</div>'+
+      '<label for="loadBerat_'+id+'">Berat timbang loading (kg)</label><input type="number" id="loadBerat_'+id+'" value="'+loadBerat+'" placeholder="0" data-recalc="1">'+
+      '<div class="row2"><div><label for="gA_berat_'+id+'">Grade A — kg</label><input type="number" id="gA_berat_'+id+'" value="'+gAb+'" placeholder="0" data-recalc="1"></div>'+
+      '<div><label for="gA_harga_'+id+'">Grade A — harga/kg</label><input type="number" id="gA_harga_'+id+'" value="'+gAh+'" placeholder="0" data-recalc="1">'+
+      '<div class="price-suggest" id="jualPriceSuggest_a_'+id+'"></div></div></div>'+
+      '<div class="row2"><div><label for="gB_berat_'+id+'">Grade B — kg</label><input type="number" id="gB_berat_'+id+'" value="'+gBb+'" placeholder="0" data-recalc="1"></div>'+
+      '<div><label for="gB_harga_'+id+'">Grade B — harga/kg</label><input type="number" id="gB_harga_'+id+'" value="'+gBh+'" placeholder="0" data-recalc="1">'+
+      '<div class="price-suggest" id="jualPriceSuggest_b_'+id+'"></div></div></div>'+
       '<label for="bongkar_'+id+'">Tarif bongkar muat '+jenis+' (per ton)</label>'+
       '<input type="number" id="bongkar_'+id+'" value="'+defBongkar+'" data-recalc="1">';
   }
 
-  function bindTripFormEvents(b,t){
+  function bindTripFormEvents(b,t, isEdit, editData){
     document.getElementById('tripCancel').addEventListener('click', function(){
       document.getElementById('tripFormCard').remove();
     });
     document.querySelectorAll('#tripFormCard input, #tripFormCard select').forEach(function(el){
-      el.addEventListener('input', function(){ recalcTrip(b,t); });
-      el.addEventListener('change', function(){ recalcTrip(b,t); });
+      el.addEventListener('input', function(){ recalcTrip(b,t, isEdit, editData); });
+      el.addEventListener('change', function(){ recalcTrip(b,t, isEdit, editData); });
     });
     document.getElementById('tripTarifTransport').addEventListener('change', function(){
       document.getElementById('tripTarifTransportCustomWrap').style.display = this.value==='custom' ? 'block':'none';
-      recalcTrip(b,t);
+      recalcTrip(b,t, isEdit, editData);
     });
     document.querySelectorAll('#tripStatusBayar button').forEach(function(btn){
       btn.addEventListener('click', function(){
@@ -621,7 +691,29 @@
         document.getElementById('tripJatuhTempoWrap').style.display = btn.dataset.val==='Pending' ? 'block':'none';
       });
     });
-    document.getElementById('tripSubmit').addEventListener('click', function(){ submitTrip(b,t); });
+    document.getElementById('tripSubmit').addEventListener('click', function(){ submitTrip(b,t, isEdit, editData); });
+
+    // Render price suggestions for jual grade fields
+    setTimeout(function(){
+      ['berondol','tbs'].forEach(function(jenis){
+        var aInput = document.getElementById('gA_harga_'+jenis);
+        var bInput = document.getElementById('gB_harga_'+jenis);
+        if(aInput){
+          renderPriceSuggestions('jualPriceSuggest_a_'+jenis, 'jual-a', aInput.value);
+          aInput.addEventListener('input', function(){
+            renderPriceSuggestions('jualPriceSuggest_a_'+jenis, 'jual-a', this.value);
+            recalcTrip(b,t, isEdit, editData);
+          });
+        }
+        if(bInput){
+          renderPriceSuggestions('jualPriceSuggest_b_'+jenis, 'jual-b', bInput.value);
+          bInput.addEventListener('input', function(){
+            renderPriceSuggestions('jualPriceSuggest_b_'+jenis, 'jual-b', this.value);
+            recalcTrip(b,t, isEdit, editData);
+          });
+        }
+      });
+    }, 50);
   }
 
   function getIncludedIds(jenis){
@@ -629,33 +721,41 @@
   }
   function val(id){ var el=document.getElementById(id); return el ? (parseFloat(el.value)||0) : 0; }
 
-  function computeTripFigures(b,t){
+  function computeTripFigures(b,t, isEdit, editData){
     var jenisList = [];
-    if(b.length) jenisList.push('Berondol');
-    if(t.length) jenisList.push('TBS');
+    if(b.length>0 || (isEdit && editData && editData.figures.perJenis && editData.figures.perJenis['Berondol'])) jenisList.push('Berondol');
+    if(t.length>0 || (isEdit && editData && editData.figures.perJenis && editData.figures.perJenis['TBS'])) jenisList.push('TBS');
 
     var perJenis = {};
     var totalModal=0, totalKgLoading=0, totalPendapatan=0, totalBongkar=0, totalPotongan=0, totalLapangan=0;
 
     jenisList.forEach(function(jenis){
-      var idsIncluded = getIncludedIds(jenis);
+      var idsIncluded = isEdit ? [] : getIncludedIds(jenis);
       var srcList = jenis==='Berondol'? b : t;
-      var included = srcList.filter(function(p){return idsIncluded.indexOf(p.id)>=0;});
+      var included = isEdit ? [] : srcList.filter(function(p){return idsIncluded.indexOf(p.id)>=0;});
+
+      // If editing, reconstruct from editData
+      if(isEdit && editData && editData.figures.perJenis && editData.figures.perJenis[jenis]){
+        var d = editData.figures.perJenis[jenis];
+        included = d.included || [];
+      }
+
       var beratLapangan = sumBerat(included);
       var modal = sumTotal(included);
       var idk = jenis.toLowerCase();
-      var beratLoading = val('loadBerat_'+idk);
-      var gAb = val('gA_berat_'+idk), gAh = val('gA_harga_'+idk);
-      var gBb = val('gB_berat_'+idk), gBh = val('gB_harga_'+idk);
+      var beratLoading = val('loadBerat_'+idk) || (isEdit && editData && editData.figures.perJenis && editData.figures.perJenis[jenis] ? editData.figures.perJenis[jenis].beratLoading : 0);
+      var gAb = val('gA_berat_'+idk);
+      var gAh = val('gA_harga_'+idk);
+      var gBb = val('gB_berat_'+idk);
+      var gBh = val('gB_harga_'+idk);
       var pendapatan = gAb*gAh + gBb*gBh;
       var potongan = beratLoading*0.02;
-      var bongkarTarif = val('bongkar_'+idk);
+      var bongkarTarif = val('bongkar_'+idk) || (isEdit && editData && editData.figures.perJenis && editData.figures.perJenis[jenis] ? editData.figures.perJenis[jenis].bongkarTarif : 0);
       var bongkarBiaya = beratLoading*(bongkarTarif/1000);
 
       perJenis[jenis] = {included:included, beratLapangan:beratLapangan, modal:modal, beratLoading:beratLoading,
         selisih: beratLapangan-beratLoading, gAb:gAb,gAh:gAh,gBb:gBb,gBh:gBh, pendapatan:pendapatan,
         potongan:potongan, bongkarTarif:bongkarTarif, bongkarBiaya:bongkarBiaya};
-
       totalModal+=modal; totalKgLoading+=beratLoading; totalPendapatan+=pendapatan;
       totalBongkar+=bongkarBiaya; totalPotongan+=potongan; totalLapangan+=beratLapangan;
     });
@@ -671,44 +771,85 @@
       totalPotongan:totalPotongan, tarifTransport:tarifTransport, biayaTransport:biayaTransport, tips:tips, margin:margin};
   }
 
-  function recalcTrip(b,t){
-    var f = computeTripFigures(b,t);
+  function recalcTrip(b,t, isEdit, editData){
+    var f = computeTripFigures(b,t, isEdit, editData);
     var html = '<div class="subhead">Ringkasan Otomatis</div>';
     f.jenisList.forEach(function(jenis){
       var d = f.perJenis[jenis];
-      html += '<div class="calc-row sub"><span>Selisih timbangan '+jenis+' (lapangan − loading)</span><span class="v">'+kg(d.selisih)+'</span></div>';
+      if(d.beratLapangan>0) html += '<div class="calc-row sub"><span>Selisih timbangan '+jenis+' (lap − loading)</span><span class="v">'+kg(d.selisih)+'</span></div>';
     });
     html += '<div class="calc-row sub"><span>Potongan wajib 2%</span><span class="v">'+rp(f.totalPotongan)+'</span></div>';
     html += '<div class="calc-row"><span>Pendapatan penjualan</span><span class="v">'+rp(f.totalPendapatan)+'</span></div>';
-    html += '<div class="calc-row neg"><span>Modal (transaksi beli terkait)</span><span class="v">− '+rp(f.totalModal)+'</span></div>';
-    html += '<div class="calc-row neg"><span>Biaya transport ('+rp(f.tarifTransport)+'/ton)</span><span class="v">− '+rp(f.biayaTransport)+'</span></div>';
-    html += '<div class="calc-row neg"><span>Biaya bongkar muat</span><span class="v">− '+rp(f.totalBongkar)+'</span></div>';
-    if(f.tips>0) html += '<div class="calc-row neg"><span>Tips tukang muat</span><span class="v">− '+rp(f.tips)+'</span></div>';
+    html += '<div class="calc-row neg"><span>Modal dari petani</span><span class="v">− '+rp(f.totalModal)+'</span></div>';
+    html += '<div class="calc-row neg"><span>🚛 Upah Transport ('+rp(f.tarifTransport)+'/ton)</span><span class="v">− '+rp(f.biayaTransport)+'</span></div>';
+    html += '<div class="calc-row neg"><span>💪 Upah Bongkar Muat</span><span class="v">− '+rp(f.totalBongkar)+'</span></div>';
+    if(f.tips>0) html += '<div class="calc-row neg"><span>💵 Tips tukang muat</span><span class="v">− '+rp(f.tips)+'</span></div>';
     html += '<div class="calc-row total '+(f.margin<0?'neg':'pos')+'"><span>Margin trip ini</span><span class="v">'+rp(f.margin)+'</span></div>';
     document.getElementById('tripCalc').innerHTML = html;
   }
 
-  function submitTrip(b,t){
+  function submitTrip(b,t, isEdit, editData){
     var namaLoading = document.getElementById('tripLoading').value.trim();
     if(!namaLoading){ alert('Isi nama loading dulu.'); return; }
-    var f = computeTripFigures(b,t);
-    if(f.totalKgLoading<=0){ alert('Isi berat timbang loading dulu.'); return; }
+    var f = computeTripFigures(b,t, isEdit, editData);
+    if(f.totalKgLoading<=0 && !isEdit){ alert('Isi berat timbang loading dulu.'); return; }
     var statusBtn = document.querySelector('#tripStatusBayar button.active');
-    var status = statusBtn.dataset.val;
+    var status = statusBtn ? statusBtn.dataset.val : 'COD';
     var jatuhTempo = status==='Pending' ? document.getElementById('tripJatuhTempo').value : null;
 
     var includedIds = [];
-    f.jenisList.forEach(function(j){ f.perJenis[j].included.forEach(function(p){ includedIds.push(p.id); }); });
-    var tid = 'T'+nextId();
-    state.purchases.forEach(function(p){ if(includedIds.indexOf(p.id)>=0) p.tripId = tid; });
+    if(!isEdit){
+      f.jenisList.forEach(function(j){
+        f.perJenis[j].included.forEach(function(p){ includedIds.push(p.id); });
+      });
+    }
 
-    state.trips.unshift({
-      id: tid, ts: nowStr(), namaLoading: namaLoading, figures: f,
-      status: status, jatuhTempo: jatuhTempo
-    });
+    var trip = {
+      id: isEdit ? editData.id : 'T'+nextId(),
+      ts: nowStr(),
+      date: todayStr(),
+      namaLoading: namaLoading,
+      figures: f,
+      status: status,
+      jatuhTempo: jatuhTempo
+    };
 
+    if(isEdit){
+      var idx = state.trips.findIndex(function(t){return t.id===editData.id;});
+      if(idx>=0){
+        // preserve original included purchases
+        trip.figures.perJenis = f.perJenis;
+        // For edit, keep original included ids
+        var orig = editData.figures;
+        Object.keys(orig.perJenis||{}).forEach(function(j){
+          if(orig.perJenis[j].included && !trip.figures.perJenis[j]) trip.figures.perJenis[j] = {included:[]};
+          if(orig.perJenis[j].included) trip.figures.perJenis[j].included = orig.perJenis[j].included;
+          trip.figures.perJenis[j].beratLapangan = sumBerat(orig.perJenis[j].included||[]);
+          trip.figures.perJenis[j].modal = sumTotal(orig.perJenis[j].included||[]);
+        });
+        // Recalc with preserved included
+        trip.figures = f;
+        state.trips[idx] = trip;
+      }
+    } else {
+      // Mark purchases as sold
+      state.purchases.forEach(function(p){
+        if(includedIds.indexOf(p.id)>=0) p.tripId = trip.id;
+      });
+      state.trips.unshift(trip);
+    }
+
+    saveState();
     document.getElementById('tripFormCard').remove();
+    editingTripId = null;
     renderAll();
+  }
+
+  function openEditTrip(id){
+    var tr = state.trips.find(function(t){return t.id===id;});
+    if(!tr) return;
+    editingTripId = id;
+    openTripForm(tr);
   }
 
   function renderTripList(){
@@ -722,55 +863,70 @@
     var avgSelisihPct = computeAvgSelisihPct();
     wrap.innerHTML = existingForm + state.trips.map(function(tr){
       var f = tr.figures;
-      var badge = tr.status==='COD' ? '<span class="badge cod">COD lunas</span>' : '<span class="badge pending">Pending'+(tr.jatuhTempo?(' · '+tr.jatuhTempo):'')+'</span>';
+      var badge = tr.status==='COD' ? '<span class="badge cod">COD lunas</span>' : '<span class="badge pending">Pending'+(tr.jatuhTempo?' · '+tr.jatuhTempo:'')+'</span>';
       var flagHtml = '';
       f.jenisList.forEach(function(j){
         var d = f.perJenis[j];
-        var pct = d.beratLapangan>0 ? Math.abs(d.selisih)/d.beratLapangan*100 : 0;
-        if(avgSelisihPct!==null && pct > avgSelisihPct*2 && pct>3){
-          flagHtml += '<div class="flagnote">Selisih timbangan '+j+' trip ini ('+pct.toFixed(1)+'%) jauh di atas rata-rata historis ('+avgSelisihPct.toFixed(1)+'%) — layak dicek, bukan berarti pasti ada yang salah.</div>';
+        if(d){
+          var pct = d.beratLapangan>0 ? Math.abs(d.selisih)/d.beratLapangan*100 : 0;
+          if(avgSelisihPct!==null && pct > avgSelisihPct*2 && pct>3){
+            flagHtml += '<div class="flagnote">Selisih timbangan '+j+' trip ini ('+pct.toFixed(1)+'%) jauh di atas rata-rata ('+avgSelisihPct.toFixed(1)+'%) — layak dicek.</div>';
+          }
         }
       });
       var detailRows = '';
       f.jenisList.forEach(function(j){
         var d = f.perJenis[j];
-        detailRows += '<div class="calc-row sub"><span>'+j+' — lapangan / loading</span><span class="v">'+kg(d.beratLapangan)+' / '+kg(d.beratLoading)+'</span></div>';
+        if(d) detailRows += '<div class="calc-row sub"><span>'+j+' — lap / loading</span><span class="v">'+kg(d.beratLapangan)+' / '+kg(d.beratLoading)+'</span></div>';
       });
       detailRows += '<div class="calc-row"><span>Pendapatan</span><span class="v">'+rp(f.totalPendapatan)+'</span></div>';
       detailRows += '<div class="calc-row sub"><span>Modal</span><span class="v">'+rp(f.totalModal)+'</span></div>';
-      detailRows += '<div class="calc-row sub"><span>Transport + bongkar'+(f.tips>0?' + tips':'')+'</span><span class="v">'+rp(f.biayaTransport+f.totalBongkar+f.tips)+'</span></div>';
+      detailRows += '<div class="calc-row sub"><span>🚛 Transport</span><span class="v">'+rp(f.biayaTransport)+'</span></div>';
+      detailRows += '<div class="calc-row sub"><span>💪 Bongkar muat</span><span class="v">'+rp(f.totalBongkar)+'</span></div>';
+      if(f.tips) detailRows += '<div class="calc-row sub"><span>💵 Tips</span><span class="v">'+rp(f.tips)+'</span></div>';
 
       return '<div class="card trip-card" data-trip="'+tr.id+'">'+
         '<div class="head"><div class="name">'+esc(tr.namaLoading)+badge+'</div><div class="date">'+tr.ts+'</div></div>'+
         '<div class="margin '+(f.margin<0?'neg':'pos')+'">'+rp(f.margin)+'</div>'+
         flagHtml+
-        '<div class="detail">'+detailRows+'</div>'+
-        '</div>';
+        '<div class="detail">'+detailRows+
+        '<button class="btn ghost small" data-edit-trip="'+tr.id+'" style="margin-top:10px;width:auto">✏️ Edit Trip</button>'+
+        '</div></div>';
     }).join('');
 
     wrap.querySelectorAll('.trip-card').forEach(function(card){
-      card.addEventListener('click', function(e){ card.classList.toggle('open'); });
+      card.addEventListener('click', function(e){
+        if(e.target.getAttribute('data-edit-trip')) return;
+        card.classList.toggle('open');
+      });
+    });
+    wrap.querySelectorAll('[data-edit-trip]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        openEditTrip(parseInt(this.dataset.editTrip));
+      });
     });
   }
 
   function computeAvgSelisihPct(){
     var pcts = [];
     state.trips.forEach(function(tr){
-      tr.figures.jenisList.forEach(function(j){
+      (tr.figures.jenisList||[]).forEach(function(j){
         var d = tr.figures.perJenis[j];
-        if(d.beratLapangan>0) pcts.push(Math.abs(d.selisih)/d.beratLapangan*100);
+        if(d && d.beratLapangan>0) pcts.push(Math.abs(d.selisih)/d.beratLapangan*100);
       });
     });
     if(pcts.length<2) return null;
     return pcts.reduce(function(a,b){return a+b;},0)/pcts.length;
   }
 
-  // ================= KAS =================
+  // ===================== KAS =====================
   var kasKategori = document.getElementById('kasKategori');
   var kasJumlah = document.getElementById('kasJumlah');
   var kasKet = document.getElementById('kasKet');
   var kasPekerja = document.getElementById('kasPekerja');
   var kasSubmit = document.getElementById('kasSubmit');
+  var editingExpenseId = null;
 
   kasKategori.addEventListener('change', function(){
     document.getElementById('kasPekerjaWrap').style.display = kasKategori.value==='Makan Pekerja' ? 'block' : 'none';
@@ -783,38 +939,75 @@
   kasSubmit.addEventListener('click', function(){
     var jumlah = parseFloat(kasJumlah.value)||0;
     if(jumlah<=0) return;
-    state.expenses.unshift({
-      id: nextId(), ts: nowStr(), kategori: kasKategori.value, jumlah: jumlah,
-      ket: kasKet.value.trim(), pekerja: kasKategori.value==='Makan Pekerja' ? (parseInt(kasPekerja.value)||null) : null
-    });
+    var exp = {
+      id: editingExpenseId || nextId(),
+      ts: nowStr(),
+      date: todayStr(),
+      kategori: kasKategori.value,
+      jumlah: jumlah,
+      ket: kasKet.value.trim(),
+      pekerja: kasKategori.value==='Makan Pekerja' ? (parseInt(kasPekerja.value)||null) : null
+    };
+    if(editingExpenseId){
+      var idx = state.expenses.findIndex(function(e){return e.id===editingExpenseId;});
+      if(idx>=0) state.expenses[idx] = exp;
+      editingExpenseId = null;
+    } else {
+      state.expenses.unshift(exp);
+    }
+    saveState();
     kasJumlah.value=''; kasKet.value=''; kasPekerja.value='';
     updateKasBtn();
     renderAll();
   });
 
+  function openEditExpense(id){
+    var e = state.expenses.find(function(x){return x.id===id;});
+    if(!e) return;
+    editingExpenseId = id;
+    kasKategori.value = e.kategori;
+    kasJumlah.value = e.jumlah;
+    kasKet.value = e.ket||'';
+    if(e.pekerja) kasPekerja.value = e.pekerja;
+    document.getElementById('kasPekerjaWrap').style.display = e.kategori==='Makan Pekerja' ? 'block' : 'none';
+    updateKasBtn();
+    kasSubmit.textContent = '✏️ Simpan Perubahan';
+    // switch tab
+    document.querySelectorAll('nav.tabbar .tab').forEach(function(t){t.classList.remove('active');});
+    document.querySelector('[data-view="kas"]').classList.add('active');
+    document.querySelectorAll('section.view').forEach(function(v){v.classList.remove('active');});
+    document.getElementById('view-kas').classList.add('active');
+  }
+
   function renderKasList(){
     var wrap = document.getElementById('kasList');
     if(state.expenses.length===0){ wrap.innerHTML='<div class="empty">Belum ada pengeluaran tercatat.</div>'; return; }
     wrap.innerHTML = state.expenses.map(function(k){
-      return '<div class="list-item"><div><div class="who">'+k.kategori+'</div>'+
-        '<div class="meta">'+k.ts+(k.ket?(' · '+esc(k.ket)):'')+(k.pekerja?(' · '+k.pekerja+' pekerja'):'')+'</div></div>'+
-        '<div style="display:flex;align-items:center;gap:6px;"><div class="amt">'+rp(k.jumlah)+'</div>'+
+      return '<div class="list-item"><div><div class="who">'+esc(k.kategori)+'</div>'+
+        '<div class="meta">'+k.ts+(k.ket?' · '+esc(k.ket):'')+(k.pekerja?' · '+k.pekerja+' pekerja':'')+'</div></div>'+
+        '<div style="display:flex;align-items:center;gap:4px"><div class="amt">'+rp(k.jumlah)+'</div>'+
+        '<button class="edit-btn" data-edit-kas="'+k.id+'" title="Edit">✏️</button>'+
         '<button class="del" data-del-kas="'+k.id+'" title="Hapus">✕</button></div></div>';
     }).join('');
   }
   document.getElementById('kasList').addEventListener('click', function(e){
-    var id = e.target.getAttribute('data-del-kas');
-    if(id){ state.expenses = state.expenses.filter(function(k){return k.id!=id;}); renderAll(); }
+    var id = parseInt(e.target.getAttribute('data-del-kas'));
+    if(id && confirm('Hapus pengeluaran ini?')){
+      state.expenses = state.expenses.filter(function(k){return k.id!==id;});
+      saveState(); renderAll();
+    }
+    var editId = parseInt(e.target.getAttribute('data-edit-kas'));
+    if(editId) openEditExpense(editId);
   });
 
-  // ================= RINGKASAN =================
+  // ===================== RINGKASAN =====================
   function renderRingkasan(){
     var totalModalAll = sumTotal(state.purchases);
     var totalJual = state.trips.reduce(function(a,tr){return a+tr.figures.totalPendapatan;},0);
     var totalModalTerjual = state.trips.reduce(function(a,tr){return a+tr.figures.totalModal;},0);
     var totalBiayaTrip = state.trips.reduce(function(a,tr){return a+tr.figures.biayaTransport+tr.figures.totalBongkar+tr.figures.tips;},0);
     var marginDagang = totalJual - totalModalTerjual - totalBiayaTrip;
-    var totalKas = sumTotal2(state.expenses);
+    var totalKas = state.expenses.reduce(function(a,k){return a+k.jumlah;},0);
     var bersih = marginDagang - totalKas;
     var piutang = state.trips.filter(function(tr){return tr.status==='Pending';}).reduce(function(a,tr){return a+tr.figures.totalPendapatan;},0);
 
@@ -828,7 +1021,7 @@
     var avgPct = computeAvgSelisihPct();
     var wrap = document.getElementById('anomaliList');
     if(state.trips.length===0){
-      wrap.innerHTML = '<div class="empty">Belum ada trip selesai untuk dipantau.</div>';
+      wrap.innerHTML = '<div class="empty">Belum ada trip selesai.</div>';
     } else {
       var rows = state.trips.map(function(tr){
         var f = tr.figures;
@@ -836,21 +1029,83 @@
         var marginPerKg = f.margin/kgTot;
         return '<div class="list-item"><div><div class="who">'+esc(tr.namaLoading)+'</div>'+
           '<div class="meta">'+tr.ts+' · margin/kg '+rp(marginPerKg)+'</div></div>'+
-          '<div class="amt '+(f.margin<0?'':'')+'">'+rp(f.margin)+'</div></div>';
+          '<div class="amt '+(f.margin<0?'neg':'pos')+'">'+rp(f.margin)+'</div></div>';
       }).join('');
-      var note = avgPct!==null ? ('<div class="calc-row sub"><span>Rata-rata selisih timbangan historis</span><span class="v">'+avgPct.toFixed(1)+'%</span></div>') : '';
+      var note = avgPct!==null ? '<div class="calc-row sub"><span>Rata-rata selisih timbangan historis</span><span class="v">'+avgPct.toFixed(1)+'%</span></div>' : '';
       wrap.innerHTML = note + rows;
     }
   }
-  function sumTotal2(list){ return list.reduce(function(a,k){return a+k.jumlah;},0); }
 
-  // ================= UTIL =================
-  function esc(s){
-    return String(s).replace(/[&<>"']/g, function(c){
-      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
-    });
+  // ===================== PENGATURAN =====================
+  function renderPriceConfig(){
+    var cont = document.getElementById('priceConfigForm');
+    var c = config.priceSuggestions;
+    cont.innerHTML = 
+      '<div style="margin-bottom:12px"><strong style="font-size:13px">Harga Beli (Rp/kg)</strong></div>'+
+      '<div class="row2"><div><label>Berondol</label><input type="text" id="cfgBeliBrondol" value="'+c.beli.Berondol.join(',')+'" placeholder="pisah koma"></div>'+
+      '<div><label>TBS</label><input type="text" id="cfgBeliTbs" value="'+c.beli.TBS.join(',')+'" placeholder="pisah koma"></div></div>'+
+      '<div style="margin-bottom:12px;margin-top:16px"><strong style="font-size:13px">Harga Jual (Rp/kg)</strong></div>'+
+      '<div class="row2"><div><label>Grade A</label><input type="text" id="cfgJualA" value="'+c.jual.GradeA.join(',')+'" placeholder="pisah koma"></div>'+
+      '<div><label>Grade B</label><input type="text" id="cfgJualB" value="'+c.jual.GradeB.join(',')+'" placeholder="pisah koma"></div></div>';
   }
 
+  document.getElementById('priceConfigSave').addEventListener('click', function(){
+    try {
+      config.priceSuggestions.beli.Berondol = document.getElementById('cfgBeliBrondol').value.split(',').map(Number).filter(Boolean);
+      config.priceSuggestions.beli.TBS = document.getElementById('cfgBeliTbs').value.split(',').map(Number).filter(Boolean);
+      config.priceSuggestions.jual.GradeA = document.getElementById('cfgJualA').value.split(',').map(Number).filter(Boolean);
+      config.priceSuggestions.jual.GradeB = document.getElementById('cfgJualB').value.split(',').map(Number).filter(Boolean);
+      saveConfig();
+      alert('Pengaturan harga tersimpan!');
+    } catch(e){ alert('Error: pastikan format angka pisah koma'); }
+  });
+
+  // Export
+  document.getElementById('exportBtn').addEventListener('click', function(){
+    var data = JSON.stringify({state: state, config: config}, null, 2);
+    var blob = new Blob([data], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'sawit-bub-backup-'+todayStr()+'.json';
+    a.click();
+  });
+
+  // Import
+  document.getElementById('importBtn').addEventListener('click', function(){
+    var file = document.getElementById('importFile').files[0];
+    if(!file){ alert('Pilih file dulu.'); return; }
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try {
+        var data = JSON.parse(e.target.result);
+        if(data.state){
+          state = data.state;
+          saveState();
+        }
+        if(data.config){
+          config = data.config;
+          saveConfig();
+        }
+        renderAll();
+        renderPriceConfig();
+        alert('Data berhasil di-import!');
+      } catch(err){ alert('File tidak valid: '+err.message); }
+    };
+    reader.readAsText(file);
+  });
+
+  // Reset
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if(confirm('Hapus SEMUA data? Ini tidak bisa undo!') && confirm('Yakin?')){
+      localStorage.removeItem(STORAGE_KEY);
+      state = defaultState();
+      saveState();
+      renderAll();
+      alert('Data direset.');
+    }
+  });
+
+  // ===================== RENDER ALL =====================
   function renderAll(){
     renderBeliList();
     renderPetaniList();
@@ -858,9 +1113,15 @@
     renderTripList();
     renderKasList();
     renderRingkasan();
+    renderPriceConfig();
+    renderPriceSuggestions('beliPriceSuggest', 'beli-'+beliJenis.toLowerCase(), document.getElementById('beliHarga').value);
   }
 
+  // ===================== INIT =====================
   renderAll();
+  
+  // Auto-save every 30 seconds
+  setInterval(function(){ saveState(); }, 30000);
 })();
 </script>
 </body>
