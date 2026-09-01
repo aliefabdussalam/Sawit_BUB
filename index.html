@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sawit BUB — Makekal Hulu</title>
+<style>
+  :root{
+    --bg:#F2EDE0;
+    --surface:#FFFFFF;
+    --ink:#221C13;
+    --ink-soft:#6B6152;
+    --green:#24402B;
+    --green-dark:#182C1D;
+    --green-pale:#E4E9DF;
+    --rust:#B84B2C;
+    --rust-dark:#8F3A21;
+    --gold:#A97C24;
+    --line:#DED4BD;
+    --flag:#C97F17;
+    --flag-bg:#FBF0DC;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:84px;
+  }
+  .container{max-width:640px;margin:0 auto;padding:0 16px;}
+  header.topbar{
+    background:var(--green);
+    color:#fff;
+    padding:18px 0 16px;
+    position:sticky;top:0;z-index:20;
+    box-shadow:0 2px 6px rgba(0,0,0,.12);
+  }
+  header.topbar .row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  header.topbar h1{font-size:19px;margin:0;font-weight:700;letter-spacing:.2px;}
+  header.topbar .sub{font-size:12.5px;color:#C9D6C6;margin-top:2px;}
+  .chip{
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:999px;
+    padding:7px 13px;
+    font-size:12.5px;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+  .chip b{font-size:13.5px;}
+
+  section.view{display:none;padding-top:18px;}
+  section.view.active{display:block;}
+
+  h2.viewtitle{font-size:17px;margin:0 0 4px;font-weight:700;}
+  p.viewhint{font-size:13px;color:var(--ink-soft);margin:0 0 16px;line-height:1.5;}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:14px;
+  }
+  .card + .card{margin-top:0;}
+
+  label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin:14px 0 6px;
+  }
+  label:first-of-type{margin-top:0;}
+  input[type=text],input[type=number],select,input[type=date]{
+    width:100%;
+    font-size:16px;
+    padding:12px 13px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    color:var(--ink);
+    font-family:inherit;
+  }
+  input:focus,select:focus{outline:2px solid var(--green);outline-offset:1px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .total-readout{
+    margin-top:16px;
+    padding:14px;
+    background:var(--green-pale);
+    border-radius:8px;
+    display:flex;justify-content:space-between;align-items:baseline;
+  }
+  .total-readout .lbl{font-size:13px;color:var(--green-dark);font-weight:600;}
+  .total-readout .val{font-size:22px;font-weight:700;color:var(--green-dark);font-variant-numeric:tabular-nums;}
+
+  button.btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:700;
+    margin-top:16px;
+    min-height:52px;
+    cursor:pointer;
+  }
+  button.btn.primary{background:var(--rust);color:#fff;}
+  button.btn.primary:active{background:var(--rust-dark);}
+  button.btn.primary:disabled{background:#D9CFC0;color:#8b8272;cursor:not-allowed;}
+  button.btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green);}
+  button.btn.small{width:auto;padding:9px 14px;font-size:13.5px;min-height:auto;margin-top:0;}
+
+  .list-item{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:12px 0;border-top:1px solid var(--line);gap:10px;
+  }
+  .list-item:first-child{border-top:none;}
+  .list-item .who{font-size:14.5px;font-weight:600;}
+  .list-item .meta{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .list-item .amt{font-size:14.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .del{background:none;border:none;color:var(--ink-soft);font-size:18px;cursor:pointer;padding:4px 6px;}
+
+  .stok-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .stok-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;}
+  .stok-box .jenis{font-size:13px;font-weight:700;color:var(--green-dark);}
+  .stok-box .kg{font-size:26px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;}
+  .stok-box .rp{font-size:13px;color:var(--ink-soft);margin-top:2px;font-variant-numeric:tabular-nums;}
+  .stok-note{
+    margin-top:14px;padding:12px 14px;border-radius:8px;font-size:13px;line-height:1.5;
+  }
+  .stok-note.ready{background:var(--green-pale);color:var(--green-dark);}
+  .stok-note.notyet{background:#EFEAE0;color:var(--ink-soft);}
+
+  .checklist-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-top:1px solid var(--line);}
+  .checklist-item:first-child{border-top:none;}
+  .checklist-item input{width:auto;margin-top:3px;}
+  .checklist-item .txt{font-size:13.5px;line-height:1.4;}
+  .checklist-item .txt .m{color:var(--ink-soft);font-size:12px;}
+
+  .subhead{font-size:13px;font-weight:700;color:var(--green-dark);margin:18px 0 8px;text-transform:none;}
+  .subhead:first-child{margin-top:0;}
+
+  .calc-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13.5px;}
+  .calc-row.total{border-top:1.5px solid var(--line);margin-top:6px;padding-top:10px;font-weight:700;font-size:15px;}
+  .calc-row .v{font-variant-numeric:tabular-nums;}
+  .calc-row.sub .v{color:var(--ink-soft);}
+  .calc-row.neg .v{color:var(--rust-dark);}
+  .calc-row.pos .v{color:var(--green-dark);}
+
+  .flagnote{background:var(--flag-bg);color:#7A4E0C;border-radius:8px;padding:10px 12px;font-size:12.5px;margin-top:10px;line-height:1.5;}
+
+  .segmented{display:flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;}
+  .segmented button{
+    flex:1;padding:11px;border:none;background:#fff;font-size:13.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+  }
+  .segmented button.active{background:var(--green);color:#fff;}
+  .segmented button:not(:last-child){border-right:1.5px solid var(--line);}
+
+  .trip-card{cursor:pointer;}
+  .trip-card .head{display:flex;justify-content:space-between;align-items:center;}
+  .trip-card .head .name{font-weight:700;font-size:14.5px;}
+  .trip-card .head .date{font-size:12px;color:var(--ink-soft);}
+  .trip-card .margin{font-size:20px;font-weight:700;margin-top:8px;font-variant-numeric:tabular-nums;}
+  .trip-card .margin.neg{color:var(--rust-dark);}
+  .trip-card .margin.pos{color:var(--green-dark);}
+  .trip-card .detail{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);display:none;}
+  .trip-card.open .detail{display:block;}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;margin-left:8px;}
+  .badge.cod{background:var(--green-pale);color:var(--green-dark);}
+  .badge.pending{background:#F0E2D0;color:var(--gold);}
+
+  .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+  .summary-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;}
+  .summary-box .lbl{font-size:11.5px;color:var(--ink-soft);font-weight:600;}
+  .summary-box .val{font-size:19px;font-weight:700;margin-top:5px;font-variant-numeric:tabular-nums;}
+  .summary-box.wide{grid-column:1/-1;}
+  .summary-box.accent .val{color:var(--rust-dark);}
+  .summary-box.good .val{color:var(--green-dark);}
+
+  .empty{padding:28px 10px;text-align:center;color:var(--ink-soft);font-size:13.5px;line-height:1.6;}
+
+  .protobar{
+    background:#3A3226;color:#EFE7D6;font-size:11.5px;text-align:center;padding:7px 10px;line-height:1.5;
+  }
+
+  nav.tabbar{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#fff;border-top:1px solid var(--line);
+    display:flex;z-index:30;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  nav.tabbar button{
+    flex:1;background:none;border:none;padding:10px 4px 9px;
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    color:var(--ink-soft);cursor:pointer;
+  }
+  nav.tabbar button.active{color:var(--green);}
+  nav.tabbar button .lbl{font-size:11px;font-weight:600;}
+  nav.tabbar svg{width:22px;height:22px;}
+
+  ::placeholder{color:#B7AD9B;}
+</style>
+</head>
+<body>
+
+<div class="protobar">Prototipe demo — data tersimpan sementara selama sesi ini saja, belum permanen/offline</div>
+
+<header class="topbar">
+  <div class="container row">
+    <div>
+      <h1>Sawit BUB</h1>
+      <div class="sub">Makekal Hulu</div>
+    </div>
+    <div class="chip">Stok: <b id="chipStok">0 kg</b></div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- BELI -->
+  <section class="view active" id="view-beli">
+    <h2 class="viewtitle">Beli dari Petani</h2>
+    <p class="viewhint">Catat setiap kali timbang. Harga terisi otomatis dari transaksi terakhir, bisa diubah.</p>
+    <div class="card">
+      <label>Jenis</label>
+      <div class="segmented" id="beliJenis">
+        <button type="button" data-val="Berondol" class="active">Berondol</button>
+        <button type="button" data-val="TBS">TBS</button>
+      </div>
+
+      <label for="beliNama">Nama Petani</label>
+      <input type="text" id="beliNama" list="petaniList" placeholder="Ketik atau pilih nama">
+      <datalist id="petaniList"></datalist>
+
+      <div class="row2">
+        <div>
+          <label for="beliBerat">Berat (kg)</label>
+          <input type="number" id="beliBerat" inputmode="decimal" placeholder="0">
+        </div>
+        <div>
+          <label for="beliHarga">Harga / kg</label>
+          <input type="number" id="beliHarga" inputmode="decimal" placeholder="0">
+        </div>
+      </div>
+
+      <div class="total-readout">
+        <span class="lbl">Total dibayar</span>
+        <span class="val" id="beliTotal">Rp 0</span>
+      </div>
+
+      <button class="btn primary" id="beliSubmit" disabled>Simpan &amp; Tandai Lunas</button>
+    </div>
+
+    <div class="subhead">Transaksi hari ini</div>
+    <div class="card" id="beliList">
+      <div class="empty">Belum ada transaksi beli hari ini.</div>
+    </div>
+  </section>
+
+  <!-- STOK -->
+  <section class="view" id="view-stok">
+    <h2 class="viewtitle">Stok Menunggu Jual</h2>
+    <p class="viewhint">Dihitung otomatis dari semua transaksi beli yang belum masuk trip jual manapun.</p>
+
+    <div class="stok-grid">
+      <div class="stok-box">
+        <div class="jenis">BERONDOL</div>
+        <div class="kg" id="stokBerondolKg">0 kg</div>
+        <div class="rp" id="stokBerondolRp">Rp 0</div>
+      </div>
+      <div class="stok-box">
+        <div class="jenis">TBS</div>
+        <div class="kg" id="stokTbsKg">0 kg</div>
+        <div class="rp" id="stokTbsRp">Rp 0</div>
+      </div>
+    </div>
+
+    <div class="stok-note" id="stokNote">Belum ada stok.</div>
+
+    <div class="subhead">Rincian per petani (belum terjual)</div>
+    <div class="card" id="stokList">
+      <div class="empty">Belum ada stok menunggu.</div>
+    </div>
+  </section>
+
+  <!-- JUAL -->
+  <section class="view" id="view-jual">
+    <h2 class="viewtitle">Jual ke Loading</h2>
+    <p class="viewhint">Buat satu trip setiap kali berangkat ke loading. Isi berdasarkan nota dari loading.</p>
+
+    <button class="btn primary" id="btnTripBaru">+ Trip Jual Baru</button>
+
+    <div class="subhead" style="margin-top:22px;">Riwayat trip</div>
+    <div id="tripList">
+      <div class="card"><div class="empty">Belum ada trip jual.</div></div>
+    </div>
+  </section>
+
+  <!-- KAS -->
+  <section class="view" id="view-kas">
+    <h2 class="viewtitle">Pengeluaran Operasional &amp; Sosial</h2>
+    <p class="viewhint">Terpisah dari margin dagang — supaya kesehatan margin jual-beli tetap kelihatan jelas.</p>
+    <div class="card">
+      <label>Kategori</label>
+      <select id="kasKategori">
+        <option>Makan Pekerja</option>
+        <option>Tips Bongkar Muat</option>
+        <option>Inventaris</option>
+        <option>Dana Sosial Koperasi</option>
+        <option>Lain-lain</option>
+      </select>
+
+      <label for="kasJumlah">Jumlah (Rp)</label>
+      <input type="number" id="kasJumlah" inputmode="decimal" placeholder="0">
+
+      <div id="kasPekerjaWrap" style="display:none;">
+        <label for="kasPekerja">Jumlah pekerja hadir</label>
+        <input type="number" id="kasPekerja" inputmode="numeric" placeholder="0">
+      </div>
+
+      <label for="kasKet">Keterangan</label>
+      <input type="text" id="kasKet" placeholder="Untuk apa / siapa penerima">
+
+      <button class="btn primary" id="kasSubmit" disabled>Simpan Pengeluaran</button>
+    </div>
+
+    <div class="subhead">Riwayat pengeluaran</div>
+    <div class="card" id="kasList">
+      <div class="empty">Belum ada pengeluaran tercatat.</div>
+    </div>
+  </section>
+
+  <!-- RINGKASAN -->
+  <section class="view" id="view-ringkasan">
+    <h2 class="viewtitle">Ringkasan</h2>
+    <p class="viewhint">Margin dagang dan pengeluaran sosial ditampilkan terpisah dengan sengaja.</p>
+
+    <div class="summary-grid">
+      <div class="summary-box"><div class="lbl">Total Modal Dibeli</div><div class="val" id="sumModal">Rp 0</div></div>
+      <div class="summary-box"><div class="lbl">Total Pendapatan Jual</div><div class="val" id="sumJual">Rp 0</div></div>
+      <div class="summary-box good"><div class="lbl">Margin Dagang Bersih</div><div class="val" id="sumMargin">Rp 0</div></div>
+      <div class="summary-box accent"><div class="lbl">Pengeluaran Ops &amp; Sosial</div><div class="val" id="sumKas">Rp 0</div></div>
+      <div class="summary-box wide"><div class="lbl">Posisi Kas Bersih (Margin − Ops/Sosial)</div><div class="val" id="sumBersih">Rp 0</div></div>
+      <div class="summary-box wide"><div class="lbl">Piutang Loading (belum dibayar)</div><div class="val" id="sumPiutang">Rp 0</div></div>
+    </div>
+
+    <div class="subhead">Pemantauan selisih timbangan &amp; margin per kg</div>
+    <div class="card" id="anomaliList">
+      <div class="empty">Butuh minimal 2 trip selesai untuk mulai hitung rata-rata.</div>
+    </div>
+  </section>
+
+</div>
+
+<nav class="tabbar">
+  <button class="tab active" data-view="beli">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <span class="lbl">Beli</span>
+  </button>
+  <button class="tab" data-view="stok">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+    <span class="lbl">Stok</span>
+  </button>
+  <button class="tab" data-view="jual">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M8 12l3 3 5-6"/></svg>
+    <span class="lbl">Jual</span>
+  </button>
+  <button class="tab" data-view="kas">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
+    <span class="lbl">Kas</span>
+  </button>
+  <button class="tab" data-view="ringkasan">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+    <span class="lbl">Ringkasan</span>
+  </button>
+</nav>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- STATE ----------
+  var state = {
+    purchases: [],   // {id, ts, jenis, nama, berat, harga, total, tripId}
+    trips: [],       // see buildTrip()
+    expenses: [],    // {id, ts, kategori, jumlah, ket, pekerja}
+    lastHarga: {Berondol:null, TBS:null},
+    idSeq: 1
+  };
+
+  function nextId(){ return state.idSeq++; }
+  function nowStr(){
+    var d = new Date();
+    return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short'}) + ' ' + d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  }
+  function rp(n){
+    n = Math.round(n||0);
+    return 'Rp ' + n.toLocaleString('id-ID');
+  }
+  function kg(n){
+    n = Math.round((n||0)*10)/10;
+    return n.toLocaleString('id-ID') + ' kg';
+  }
+
+  // ---------- TAB NAV ----------
+  var tabs = document.querySelectorAll('nav.tabbar .tab');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){x.classList.remove('active');});
+      t.classList.add('active');
+      document.querySelectorAll('section.view').forEach(function(v){v.classList.remove('active');});
+      document.getElementById('view-'+t.dataset.view).classList.add('active');
+    });
+  });
+
+  // ================= BELI =================
+  var beliJenis = 'Berondol';
+  document.querySelectorAll('#beliJenis button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#beliJenis button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      beliJenis = b.dataset.val;
+      var lh = state.lastHarga[beliJenis];
+      if(lh) document.getElementById('beliHarga').value = lh;
+      updateBeliTotal();
+    });
+  });
+
+  var beliBerat = document.getElementById('beliBerat');
+  var beliHarga = document.getElementById('beliHarga');
+  var beliNama = document.getElementById('beliNama');
+  var beliTotalEl = document.getElementById('beliTotal');
+  var beliSubmit = document.getElementById('beliSubmit');
+
+  function updateBeliTotal(){
+    var b = parseFloat(beliBerat.value)||0;
+    var h = parseFloat(beliHarga.value)||0;
+    var t = b*h;
+    beliTotalEl.textContent = rp(t);
+    beliSubmit.disabled = !(b>0 && h>0 && beliNama.value.trim().length>0);
+  }
+  beliBerat.addEventListener('input', updateBeliTotal);
+  beliHarga.addEventListener('input', updateBeliTotal);
+  beliNama.addEventListener('input', updateBeliTotal);
+
+  beliSubmit.addEventListener('click', function(){
+    var b = parseFloat(beliBerat.value)||0;
+    var h = parseFloat(beliHarga.value)||0;
+    var nama = beliNama.value.trim();
+    if(!(b>0 && h>0 && nama)) return;
+    state.purchases.unshift({
+      id: nextId(), ts: nowStr(), jenis: beliJenis, nama: nama,
+      berat: b, harga: h, total: b*h, tripId: null
+    });
+    state.lastHarga[beliJenis] = h;
+    beliBerat.value=''; beliNama.value='';
+    updateBeliTotal();
+    renderAll();
+  });
+
+  function renderBeliList(){
+    var wrap = document.getElementById('beliList');
+    var today = state.purchases;
+    if(today.length===0){ wrap.innerHTML = '<div class="empty">Belum ada transaksi beli hari ini.</div>'; return; }
+    wrap.innerHTML = today.map(function(p){
+      return '<div class="list-item">'+
+        '<div><div class="who">'+esc(p.nama)+' <span style="font-weight:400;color:var(--ink-soft);">· '+p.jenis+'</span></div>'+
+        '<div class="meta">'+p.ts+' · '+kg(p.berat)+' @ '+rp(p.harga)+(p.tripId?' · sudah terjual':'')+'</div></div>'+
+        '<div style="display:flex;align-items:center;gap:6px;"><div class="amt">'+rp(p.total)+'</div>'+
+        (p.tripId? '' : '<button class="del" data-del-purchase="'+p.id+'" title="Hapus">✕</button>')+
+        '</div></div>';
+    }).join('');
+  }
+
+  document.getElementById('beliList').addEventListener('click', function(e){
+    var id = e.target.getAttribute('data-del-purchase');
+    if(id){
+      state.purchases = state.purchases.filter(function(p){return p.id!=id;});
+      renderAll();
+    }
+  });
+
+  function renderPetaniList(){
+    var names = Array.from(new Set(state.purchases.map(function(p){return p.nama;})));
+    document.getElementById('petaniList').innerHTML = names.map(function(n){return '<option value="'+esc(n)+'">';}).join('');
+  }
+
+  // ================= STOK =================
+  function pendingByJenis(jenis){
+    return state.purchases.filter(function(p){return p.jenis===jenis && !p.tripId;});
+  }
+  function sumBerat(list){ return list.reduce(function(a,p){return a+p.berat;},0); }
+  function sumTotal(list){ return list.reduce(function(a,p){return a+p.total;},0); }
+
+  function renderStok(){
+    var b = pendingByJenis('Berondol');
+    var t = pendingByJenis('TBS');
+    var bKg = sumBerat(b), bRp = sumTotal(b);
+    var tKg = sumBerat(t), tRp = sumTotal(t);
+
+    document.getElementById('stokBerondolKg').textContent = kg(bKg);
+    document.getElementById('stokBerondolRp').textContent = rp(bRp);
+    document.getElementById('stokTbsKg').textContent = kg(tKg);
+    document.getElementById('stokTbsRp').textContent = rp(tRp);
+    document.getElementById('chipStok').textContent = Math.round(bKg+tKg).toLocaleString('id-ID')+' kg';
+
+    var totalKg = bKg+tKg;
+    var noteEl = document.getElementById('stokNote');
+    if(totalKg===0){
+      noteEl.className='stok-note notyet';
+      noteEl.textContent='Belum ada stok menunggu.';
+    } else if(totalKg>=2000){
+      noteEl.className='stok-note ready';
+      noteEl.textContent='Stok sudah '+kg(totalKg)+' — sudah lewat minimum 2 ton, siap dibawa jual kapan saja.';
+    } else {
+      noteEl.className='stok-note notyet';
+      noteEl.textContent='Stok baru '+kg(totalKg)+' — masih di bawah minimum 2 ton untuk satu trip jual.';
+    }
+
+    var all = b.concat(t);
+    var wrap = document.getElementById('stokList');
+    if(all.length===0){ wrap.innerHTML = '<div class="empty">Belum ada stok menunggu.</div>'; return; }
+    wrap.innerHTML = all.map(function(p){
+      return '<div class="list-item"><div><div class="who">'+esc(p.nama)+' <span style="font-weight:400;color:var(--ink-soft);">· '+p.jenis+'</span></div>'+
+        '<div class="meta">'+p.ts+' · '+kg(p.berat)+'</div></div><div class="amt">'+rp(p.total)+'</div></div>';
+    }).join('');
+  }
+
+  // ================= JUAL =================
+  document.getElementById('btnTripBaru').addEventListener('click', openTripForm);
+
+  function openTripForm(){
+    var b = pendingByJenis('Berondol');
+    var t = pendingByJenis('TBS');
+    if(b.length+t.length===0){
+      alert('Belum ada stok menunggu untuk dijual.');
+      return;
+    }
+    var wrap = document.getElementById('tripList');
+    var formHtml = '<div class="card" id="tripFormCard">'+
+      '<div class="subhead" style="margin-top:0;">Trip Baru</div>'+
+      '<label for="tripLoading">Nama Loading</label>'+
+      '<input type="text" id="tripLoading" placeholder="Nama loading tujuan">'+
+
+      '<div class="subhead">Sertakan dari stok pending</div>'+
+      renderChecklist(b,'Berondol') + renderChecklist(t,'TBS') +
+
+      buildJenisBlock('Berondol', b) +
+      buildJenisBlock('TBS', t) +
+
+      '<div class="subhead">Biaya Trip</div>'+
+      '<label>Tarif transport (per ton)</label>'+
+      '<select id="tripTarifTransport"><option value="70000">Rp70.000/ton</option><option value="100000">Rp100.000/ton</option><option value="custom">Lainnya…</option></select>'+
+      '<div id="tripTarifTransportCustomWrap" style="display:none;"><input type="number" id="tripTarifTransportCustom" placeholder="Rp per ton" style="margin-top:8px;"></div>'+
+
+      '<label for="tripTips">Tips tukang bongkar muat (opsional)</label>'+
+      '<input type="number" id="tripTips" placeholder="0">'+
+
+      '<label>Status pembayaran loading</label>'+
+      '<div class="segmented" id="tripStatusBayar"><button type="button" data-val="COD" class="active">COD (lunas)</button><button type="button" data-val="Pending">Pending</button></div>'+
+      '<div id="tripJatuhTempoWrap" style="display:none;"><label for="tripJatuhTempo">Jatuh tempo</label><input type="date" id="tripJatuhTempo"></div>'+
+
+      '<div id="tripCalc"></div>'+
+      '<button class="btn primary" id="tripSubmit">Simpan Trip</button>'+
+      '<button class="btn ghost" id="tripCancel" style="margin-top:10px;">Batal</button>'+
+      '</div>';
+    wrap.insertAdjacentHTML('afterbegin', formHtml);
+
+    bindTripFormEvents(b,t);
+    recalcTrip(b,t);
+  }
+
+  function renderChecklist(list, jenis){
+    if(list.length===0) return '';
+    return list.map(function(p){
+      return '<div class="checklist-item"><input type="checkbox" class="trip-inc" data-jenis="'+jenis+'" data-id="'+p.id+'" checked>'+
+        '<div class="txt">'+esc(p.nama)+' — '+kg(p.berat)+' <span class="m">('+rp(p.total)+')</span></div></div>';
+    }).join('');
+  }
+
+  function buildJenisBlock(jenis, list){
+    if(list.length===0) return '';
+    var defBongkar = jenis==='Berondol' ? 60000 : 40000;
+    var id = jenis.toLowerCase();
+    return '<div class="subhead">Hasil Timbang Loading — '+jenis+'</div>'+
+      '<label for="loadBerat_'+id+'">Berat timbang loading (kg)</label>'+
+      '<input type="number" id="loadBerat_'+id+'" placeholder="0" data-recalc="1">'+
+      '<div class="row2">'+
+        '<div><label for="gA_berat_'+id+'">Grade A — kg</label><input type="number" id="gA_berat_'+id+'" placeholder="0" data-recalc="1"></div>'+
+        '<div><label for="gA_harga_'+id+'">Grade A — harga/kg</label><input type="number" id="gA_harga_'+id+'" placeholder="0" data-recalc="1"></div>'+
+      '</div>'+
+      '<div class="row2">'+
+        '<div><label for="gB_berat_'+id+'">Grade B — kg (jika ada)</label><input type="number" id="gB_berat_'+id+'" placeholder="0" data-recalc="1"></div>'+
+        '<div><label for="gB_harga_'+id+'">Grade B — harga/kg</label><input type="number" id="gB_harga_'+id+'" placeholder="0" data-recalc="1"></div>'+
+      '</div>'+
+      '<label for="bongkar_'+id+'">Tarif bongkar muat '+jenis+' (per ton)</label>'+
+      '<input type="number" id="bongkar_'+id+'" value="'+defBongkar+'" data-recalc="1">';
+  }
+
+  function bindTripFormEvents(b,t){
+    document.getElementById('tripCancel').addEventListener('click', function(){
+      document.getElementById('tripFormCard').remove();
+    });
+    document.querySelectorAll('#tripFormCard input, #tripFormCard select').forEach(function(el){
+      el.addEventListener('input', function(){ recalcTrip(b,t); });
+      el.addEventListener('change', function(){ recalcTrip(b,t); });
+    });
+    document.getElementById('tripTarifTransport').addEventListener('change', function(){
+      document.getElementById('tripTarifTransportCustomWrap').style.display = this.value==='custom' ? 'block':'none';
+      recalcTrip(b,t);
+    });
+    document.querySelectorAll('#tripStatusBayar button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('#tripStatusBayar button').forEach(function(x){x.classList.remove('active');});
+        btn.classList.add('active');
+        document.getElementById('tripJatuhTempoWrap').style.display = btn.dataset.val==='Pending' ? 'block':'none';
+      });
+    });
+    document.getElementById('tripSubmit').addEventListener('click', function(){ submitTrip(b,t); });
+  }
+
+  function getIncludedIds(jenis){
+    return Array.from(document.querySelectorAll('.trip-inc[data-jenis="'+jenis+'"]:checked')).map(function(el){return parseInt(el.dataset.id);});
+  }
+  function val(id){ var el=document.getElementById(id); return el ? (parseFloat(el.value)||0) : 0; }
+
+  function computeTripFigures(b,t){
+    var jenisList = [];
+    if(b.length) jenisList.push('Berondol');
+    if(t.length) jenisList.push('TBS');
+
+    var perJenis = {};
+    var totalModal=0, totalKgLoading=0, totalPendapatan=0, totalBongkar=0, totalPotongan=0, totalLapangan=0;
+
+    jenisList.forEach(function(jenis){
+      var idsIncluded = getIncludedIds(jenis);
+      var srcList = jenis==='Berondol'? b : t;
+      var included = srcList.filter(function(p){return idsIncluded.indexOf(p.id)>=0;});
+      var beratLapangan = sumBerat(included);
+      var modal = sumTotal(included);
+      var idk = jenis.toLowerCase();
+      var beratLoading = val('loadBerat_'+idk);
+      var gAb = val('gA_berat_'+idk), gAh = val('gA_harga_'+idk);
+      var gBb = val('gB_berat_'+idk), gBh = val('gB_harga_'+idk);
+      var pendapatan = gAb*gAh + gBb*gBh;
+      var potongan = beratLoading*0.02;
+      var bongkarTarif = val('bongkar_'+idk);
+      var bongkarBiaya = beratLoading*(bongkarTarif/1000);
+
+      perJenis[jenis] = {included:included, beratLapangan:beratLapangan, modal:modal, beratLoading:beratLoading,
+        selisih: beratLapangan-beratLoading, gAb:gAb,gAh:gAh,gBb:gBb,gBh:gBh, pendapatan:pendapatan,
+        potongan:potongan, bongkarTarif:bongkarTarif, bongkarBiaya:bongkarBiaya};
+
+      totalModal+=modal; totalKgLoading+=beratLoading; totalPendapatan+=pendapatan;
+      totalBongkar+=bongkarBiaya; totalPotongan+=potongan; totalLapangan+=beratLapangan;
+    });
+
+    var transSel = document.getElementById('tripTarifTransport');
+    var tarifTransport = transSel && transSel.value==='custom' ? val('tripTarifTransportCustom') : parseFloat(transSel?transSel.value:70000);
+    var biayaTransport = totalKgLoading*(tarifTransport/1000);
+    var tips = val('tripTips');
+    var margin = totalPendapatan - totalModal - biayaTransport - totalBongkar - tips;
+
+    return {perJenis:perJenis, jenisList:jenisList, totalModal:totalModal, totalKgLoading:totalKgLoading,
+      totalLapangan:totalLapangan, totalPendapatan:totalPendapatan, totalBongkar:totalBongkar,
+      totalPotongan:totalPotongan, tarifTransport:tarifTransport, biayaTransport:biayaTransport, tips:tips, margin:margin};
+  }
+
+  function recalcTrip(b,t){
+    var f = computeTripFigures(b,t);
+    var html = '<div class="subhead">Ringkasan Otomatis</div>';
+    f.jenisList.forEach(function(jenis){
+      var d = f.perJenis[jenis];
+      html += '<div class="calc-row sub"><span>Selisih timbangan '+jenis+' (lapangan − loading)</span><span class="v">'+kg(d.selisih)+'</span></div>';
+    });
+    html += '<div class="calc-row sub"><span>Potongan wajib 2%</span><span class="v">'+rp(f.totalPotongan)+'</span></div>';
+    html += '<div class="calc-row"><span>Pendapatan penjualan</span><span class="v">'+rp(f.totalPendapatan)+'</span></div>';
+    html += '<div class="calc-row neg"><span>Modal (transaksi beli terkait)</span><span class="v">− '+rp(f.totalModal)+'</span></div>';
+    html += '<div class="calc-row neg"><span>Biaya transport ('+rp(f.tarifTransport)+'/ton)</span><span class="v">− '+rp(f.biayaTransport)+'</span></div>';
+    html += '<div class="calc-row neg"><span>Biaya bongkar muat</span><span class="v">− '+rp(f.totalBongkar)+'</span></div>';
+    if(f.tips>0) html += '<div class="calc-row neg"><span>Tips tukang muat</span><span class="v">− '+rp(f.tips)+'</span></div>';
+    html += '<div class="calc-row total '+(f.margin<0?'neg':'pos')+'"><span>Margin trip ini</span><span class="v">'+rp(f.margin)+'</span></div>';
+    document.getElementById('tripCalc').innerHTML = html;
+  }
+
+  function submitTrip(b,t){
+    var namaLoading = document.getElementById('tripLoading').value.trim();
+    if(!namaLoading){ alert('Isi nama loading dulu.'); return; }
+    var f = computeTripFigures(b,t);
+    if(f.totalKgLoading<=0){ alert('Isi berat timbang loading dulu.'); return; }
+    var statusBtn = document.querySelector('#tripStatusBayar button.active');
+    var status = statusBtn.dataset.val;
+    var jatuhTempo = status==='Pending' ? document.getElementById('tripJatuhTempo').value : null;
+
+    var includedIds = [];
+    f.jenisList.forEach(function(j){ f.perJenis[j].included.forEach(function(p){ includedIds.push(p.id); }); });
+    var tid = 'T'+nextId();
+    state.purchases.forEach(function(p){ if(includedIds.indexOf(p.id)>=0) p.tripId = tid; });
+
+    state.trips.unshift({
+      id: tid, ts: nowStr(), namaLoading: namaLoading, figures: f,
+      status: status, jatuhTempo: jatuhTempo
+    });
+
+    document.getElementById('tripFormCard').remove();
+    renderAll();
+  }
+
+  function renderTripList(){
+    var wrap = document.getElementById('tripList');
+    var formCard = document.getElementById('tripFormCard');
+    var existingForm = formCard ? formCard.outerHTML : '';
+    if(state.trips.length===0){
+      wrap.innerHTML = existingForm + '<div class="card"><div class="empty">Belum ada trip jual.</div></div>';
+      return;
+    }
+    var avgSelisihPct = computeAvgSelisihPct();
+    wrap.innerHTML = existingForm + state.trips.map(function(tr){
+      var f = tr.figures;
+      var badge = tr.status==='COD' ? '<span class="badge cod">COD lunas</span>' : '<span class="badge pending">Pending'+(tr.jatuhTempo?(' · '+tr.jatuhTempo):'')+'</span>';
+      var flagHtml = '';
+      f.jenisList.forEach(function(j){
+        var d = f.perJenis[j];
+        var pct = d.beratLapangan>0 ? Math.abs(d.selisih)/d.beratLapangan*100 : 0;
+        if(avgSelisihPct!==null && pct > avgSelisihPct*2 && pct>3){
+          flagHtml += '<div class="flagnote">Selisih timbangan '+j+' trip ini ('+pct.toFixed(1)+'%) jauh di atas rata-rata historis ('+avgSelisihPct.toFixed(1)+'%) — layak dicek, bukan berarti pasti ada yang salah.</div>';
+        }
+      });
+      var detailRows = '';
+      f.jenisList.forEach(function(j){
+        var d = f.perJenis[j];
+        detailRows += '<div class="calc-row sub"><span>'+j+' — lapangan / loading</span><span class="v">'+kg(d.beratLapangan)+' / '+kg(d.beratLoading)+'</span></div>';
+      });
+      detailRows += '<div class="calc-row"><span>Pendapatan</span><span class="v">'+rp(f.totalPendapatan)+'</span></div>';
+      detailRows += '<div class="calc-row sub"><span>Modal</span><span class="v">'+rp(f.totalModal)+'</span></div>';
+      detailRows += '<div class="calc-row sub"><span>Transport + bongkar'+(f.tips>0?' + tips':'')+'</span><span class="v">'+rp(f.biayaTransport+f.totalBongkar+f.tips)+'</span></div>';
+
+      return '<div class="card trip-card" data-trip="'+tr.id+'">'+
+        '<div class="head"><div class="name">'+esc(tr.namaLoading)+badge+'</div><div class="date">'+tr.ts+'</div></div>'+
+        '<div class="margin '+(f.margin<0?'neg':'pos')+'">'+rp(f.margin)+'</div>'+
+        flagHtml+
+        '<div class="detail">'+detailRows+'</div>'+
+        '</div>';
+    }).join('');
+
+    wrap.querySelectorAll('.trip-card').forEach(function(card){
+      card.addEventListener('click', function(e){ card.classList.toggle('open'); });
+    });
+  }
+
+  function computeAvgSelisihPct(){
+    var pcts = [];
+    state.trips.forEach(function(tr){
+      tr.figures.jenisList.forEach(function(j){
+        var d = tr.figures.perJenis[j];
+        if(d.beratLapangan>0) pcts.push(Math.abs(d.selisih)/d.beratLapangan*100);
+      });
+    });
+    if(pcts.length<2) return null;
+    return pcts.reduce(function(a,b){return a+b;},0)/pcts.length;
+  }
+
+  // ================= KAS =================
+  var kasKategori = document.getElementById('kasKategori');
+  var kasJumlah = document.getElementById('kasJumlah');
+  var kasKet = document.getElementById('kasKet');
+  var kasPekerja = document.getElementById('kasPekerja');
+  var kasSubmit = document.getElementById('kasSubmit');
+
+  kasKategori.addEventListener('change', function(){
+    document.getElementById('kasPekerjaWrap').style.display = kasKategori.value==='Makan Pekerja' ? 'block' : 'none';
+  });
+  function updateKasBtn(){
+    kasSubmit.disabled = !((parseFloat(kasJumlah.value)||0) > 0);
+  }
+  kasJumlah.addEventListener('input', updateKasBtn);
+
+  kasSubmit.addEventListener('click', function(){
+    var jumlah = parseFloat(kasJumlah.value)||0;
+    if(jumlah<=0) return;
+    state.expenses.unshift({
+      id: nextId(), ts: nowStr(), kategori: kasKategori.value, jumlah: jumlah,
+      ket: kasKet.value.trim(), pekerja: kasKategori.value==='Makan Pekerja' ? (parseInt(kasPekerja.value)||null) : null
+    });
+    kasJumlah.value=''; kasKet.value=''; kasPekerja.value='';
+    updateKasBtn();
+    renderAll();
+  });
+
+  function renderKasList(){
+    var wrap = document.getElementById('kasList');
+    if(state.expenses.length===0){ wrap.innerHTML='<div class="empty">Belum ada pengeluaran tercatat.</div>'; return; }
+    wrap.innerHTML = state.expenses.map(function(k){
+      return '<div class="list-item"><div><div class="who">'+k.kategori+'</div>'+
+        '<div class="meta">'+k.ts+(k.ket?(' · '+esc(k.ket)):'')+(k.pekerja?(' · '+k.pekerja+' pekerja'):'')+'</div></div>'+
+        '<div style="display:flex;align-items:center;gap:6px;"><div class="amt">'+rp(k.jumlah)+'</div>'+
+        '<button class="del" data-del-kas="'+k.id+'" title="Hapus">✕</button></div></div>';
+    }).join('');
+  }
+  document.getElementById('kasList').addEventListener('click', function(e){
+    var id = e.target.getAttribute('data-del-kas');
+    if(id){ state.expenses = state.expenses.filter(function(k){return k.id!=id;}); renderAll(); }
+  });
+
+  // ================= RINGKASAN =================
+  function renderRingkasan(){
+    var totalModalAll = sumTotal(state.purchases);
+    var totalJual = state.trips.reduce(function(a,tr){return a+tr.figures.totalPendapatan;},0);
+    var totalModalTerjual = state.trips.reduce(function(a,tr){return a+tr.figures.totalModal;},0);
+    var totalBiayaTrip = state.trips.reduce(function(a,tr){return a+tr.figures.biayaTransport+tr.figures.totalBongkar+tr.figures.tips;},0);
+    var marginDagang = totalJual - totalModalTerjual - totalBiayaTrip;
+    var totalKas = sumTotal2(state.expenses);
+    var bersih = marginDagang - totalKas;
+    var piutang = state.trips.filter(function(tr){return tr.status==='Pending';}).reduce(function(a,tr){return a+tr.figures.totalPendapatan;},0);
+
+    document.getElementById('sumModal').textContent = rp(totalModalAll);
+    document.getElementById('sumJual').textContent = rp(totalJual);
+    document.getElementById('sumMargin').textContent = rp(marginDagang);
+    document.getElementById('sumKas').textContent = rp(totalKas);
+    document.getElementById('sumBersih').textContent = rp(bersih);
+    document.getElementById('sumPiutang').textContent = rp(piutang);
+
+    var avgPct = computeAvgSelisihPct();
+    var wrap = document.getElementById('anomaliList');
+    if(state.trips.length===0){
+      wrap.innerHTML = '<div class="empty">Belum ada trip selesai untuk dipantau.</div>';
+    } else {
+      var rows = state.trips.map(function(tr){
+        var f = tr.figures;
+        var kgTot = f.totalKgLoading||1;
+        var marginPerKg = f.margin/kgTot;
+        return '<div class="list-item"><div><div class="who">'+esc(tr.namaLoading)+'</div>'+
+          '<div class="meta">'+tr.ts+' · margin/kg '+rp(marginPerKg)+'</div></div>'+
+          '<div class="amt '+(f.margin<0?'':'')+'">'+rp(f.margin)+'</div></div>';
+      }).join('');
+      var note = avgPct!==null ? ('<div class="calc-row sub"><span>Rata-rata selisih timbangan historis</span><span class="v">'+avgPct.toFixed(1)+'%</span></div>') : '';
+      wrap.innerHTML = note + rows;
+    }
+  }
+  function sumTotal2(list){ return list.reduce(function(a,k){return a+k.jumlah;},0); }
+
+  // ================= UTIL =================
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function renderAll(){
+    renderBeliList();
+    renderPetaniList();
+    renderStok();
+    renderTripList();
+    renderKasList();
+    renderRingkasan();
+  }
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
